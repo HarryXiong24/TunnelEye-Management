@@ -48,7 +48,7 @@
 
       <el-form-item prop="captcha" class="captcha-content">
         <span class="svg-container">
-          <svg-icon icon-class="password" />
+          <i class="el-icon-loading"></i>
         </span>
         <el-input
           ref="password"
@@ -146,20 +146,16 @@ export default {
     },
     async changeCaptcha() {
       await this.$store.dispatch('captcha/getCaptcha')
-      console.log(this.$store.state.captcha.captcha)
     },
     handleLogin() {
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
-          await this.$store.dispatch('login/doLogin', this.loginForm)
-          console.log(this.$store.state.login.loginInfo)
-          if (this.$store.state.login.loginInfo) {
-            if (this.$store.state.login.loginInfo.success === true) {
-              setToken(this.$store.state.login.loginInfo.token)
-              this.$store.state.user.name = this.$store.state.login.loginInfo.user.username
+          await this.$store.dispatch('user/doLogin', this.loginForm)
+          if (this.$store.state.user.loginInfo) {
+            if (this.$store.state.user.loginInfo.success === true) {
               // 加密sessionStorage
-              let token = encrypt(this.$store.state.login.loginInfo.token)
-              let userInfo = encrypt(JSON.stringify(this.$store.state.login.loginInfo.user))
+              let token = encrypt(this.$store.state.user.loginInfo.token)
+              let userInfo = encrypt(JSON.stringify(this.$store.state.user.loginInfo.user))
               // 存入sessionStorage
               sessionStorage.setItem("token", token)
               sessionStorage.setItem("userInfo", userInfo)
@@ -168,20 +164,20 @@ export default {
               this.loading = false
             } else {
               Message({
-                message: this.$store.state.login.loginInfo.msg,
-                duration: 5 * 1000
+                message: this.$store.state.user.loginInfo.msg,
+                duration: 3 * 1000
               })
             }
           } else {
             Message({
-              message: this.$store.state.login.loginInfo.msg,
-              duration: 5 * 1000
+              message: this.$store.state.user.loginInfo.msg,
+              duration: 3 * 1000
             })
           }
         } else {
           Message({
             message: '请确认是否有信息没有填写!',
-            duration: 5 * 1000
+            duration: 3 * 1000
           })
           return false
         }
