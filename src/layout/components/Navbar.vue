@@ -4,6 +4,8 @@
 
     <breadcrumb class="breadcrumb-container" />
 
+    <!-- <ThemePicker></ThemePicker> -->
+
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -23,9 +25,6 @@
       </el-dropdown>
     </div>
 
-    <div class="title">
-      隧道环境及人员检测后台管理系统
-    </div>
   </div>
 </template>
 
@@ -33,11 +32,13 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import ThemePicker from '@/components/ThemePicker'
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    ThemePicker
   },
   computed: {
     ...mapGetters([
@@ -80,14 +81,6 @@ export default {
 
   .breadcrumb-container {
     float: left;
-  }
-
-  .title {
-    float: right;
-    font-size: 20px;
-    color: rgb(104, 101, 101);
-    font-weight: bold;
-    margin: 14px 40px;
   }
 
   .right-menu {

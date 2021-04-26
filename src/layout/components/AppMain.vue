@@ -1,3 +1,4 @@
+import ThemePicker from '@/components/ThemePicker';
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
