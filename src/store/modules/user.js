@@ -56,12 +56,10 @@ const actions = {
         console.log(userInfo)
 
         const { data } = response
-
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-
-        const { name, avatar } = data
+        // const { name, avatar } = data
 
         commit('SET_NAME', userInfo.userName)
         // commit('SET_AVATAR', avatar)
