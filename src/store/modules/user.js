@@ -2,6 +2,7 @@ import { reqLoginInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import { logout, getInfo } from '@/api/user'
+import { decrypt } from '@/utils/crypto'
 
 const getDefaultState = () => {
   return {
@@ -50,6 +51,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         console.log(response)
+
+        const userInfo = JSON.parse(decrypt(sessionStorage.getItem('userInfo')))
+        console.log(userInfo)
+
         const { data } = response
 
         if (!data) {
