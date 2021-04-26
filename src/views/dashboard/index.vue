@@ -1,14 +1,25 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+  <div class="index-container">
+
+    <div class="welcome">欢迎您! 尊敬的 {{ name }} 用户:</div>
+
+    <div class="text">隧道环境及人员检测管理系统——致力于为您提供全方位的服务!</div>
+
+    <div class="chart-container">
+      <chart height="100%" width="100%" />
+    </div>
   </div>
+
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Chart from '@/components/Charts/Keyboard'
+
 
 export default {
-  name: 'Dashboard',
+  name: 'Main',
+  components: { Chart },
   computed: {
     ...mapGetters([
       'name'
@@ -17,14 +28,29 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
+<style lang="scss">
+.index-container {
+  width: 100%;
+  height: 100%;
+
+  .welcome {
+    margin: 20px;
+    font-size: 24px;
+    color: #5f6464;
   }
-  &-text {
+
+  .text {
+    text-align: center;
     font-size: 30px;
-    line-height: 46px;
+    color: #5f6464;
+    line-height: 54px;
+    margin: 30px auto 0;
+  }
+
+  .chart-container{
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 200px);
   }
 }
 </style>

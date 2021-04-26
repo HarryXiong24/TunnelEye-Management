@@ -50,10 +50,8 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        console.log(response)
 
         const userInfo = JSON.parse(decrypt(sessionStorage.getItem('userInfo')))
-        console.log(userInfo)
 
         const { data } = response
         if (!data) {

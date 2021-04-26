@@ -4,13 +4,10 @@
 
     <breadcrumb class="breadcrumb-container" />
 
-    <!-- <ThemePicker></ThemePicker> -->
-
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="../../assets/logo.png" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <i class="el-icon-setting"/>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
@@ -23,6 +20,12 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+
+      <template v-if="device !== 'mobile'">
+
+        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+
+      </template>
     </div>
 
   </div>
@@ -32,18 +35,19 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import ThemePicker from '@/components/ThemePicker'
+import Screenfull from '@/components/Screenfull'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ThemePicker
+    Screenfull
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'device'
     ])
   },
   methods: {
@@ -54,7 +58,7 @@ export default {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
-  }
+  },
 }
 </script>
 
@@ -84,9 +88,12 @@ export default {
   }
 
   .right-menu {
-    float: right;
+    line-height: 46px;
     height: 100%;
-    line-height: 50px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
 
     &:focus {
       outline: none;
@@ -98,7 +105,7 @@ export default {
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      margin: 0 10px;
 
       &.hover-effect {
         cursor: pointer;
@@ -117,20 +124,25 @@ export default {
         margin-top: 5px;
         position: relative;
 
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
+        // .user-avatar {
+        //   cursor: pointer;
+        //   width: 40px;
+        //   height: 40px;
+        //   border-radius: 10px;
+        // }
+
+        .el-icon-setting {
+          font-size: 24px;
+          text-align: center;
         }
 
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
+        // .el-icon-caret-bottom {
+        //   cursor: pointer;
+        //   position: absolute;
+        //   right: -20px;
+        //   top: 25px;
+        //   font-size: 12px;
+        // }
       }
     }
   }
