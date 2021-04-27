@@ -21,11 +21,14 @@
         </el-dropdown-menu>
       </el-dropdown>
 
+      <theme-picker class="themePicker" @change="themeChange"></theme-picker>
+
       <template v-if="device !== 'mobile'">
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
       </template>
+
     </div>
 
   </div>
@@ -36,13 +39,15 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
+import ThemePicker from '@/components/ThemePicker'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Screenfull
-  },
+    Screenfull,
+    ThemePicker
+  }, 
   computed: {
     ...mapGetters([
       'sidebar',
@@ -57,6 +62,12 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    themeChange(val) {
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'theme',
+        value: val
+      })
     }
   },
 }
@@ -115,6 +126,12 @@ export default {
           background: rgba(0, 0, 0, .025)
         }
       }
+    }
+
+    .themePicker {
+      float: right;
+      height: 26px;
+      margin: -3px 15px 0 0;
     }
 
     .avatar-container {
