@@ -21,7 +21,7 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <theme-picker class="themePicker" @change="themeChange"></theme-picker>
+      <!-- <theme-picker class="themePicker" @change="themeChange"></theme-picker> -->
 
       <template v-if="device !== 'mobile'">
 
@@ -39,14 +39,14 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
-import ThemePicker from '@/components/ThemePicker'
+// import ThemePicker from '@/components/ThemePicker'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     Screenfull,
-    ThemePicker
+    // ThemePicker
   }, 
   computed: {
     ...mapGetters([
@@ -63,12 +63,12 @@ export default {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
-    themeChange(val) {
-      this.$store.dispatch('settings/changeSetting', {
-        key: 'theme',
-        value: val
-      })
-    }
+    // themeChange(val) {
+    //   this.$store.dispatch('settings/changeSetting', {
+    //     key: 'theme',
+    //     value: val
+    //   })
+    // }
   },
 }
 </script>
