@@ -13,6 +13,11 @@
         <el-switch v-model="tagsView" class="drawer-switch" />
       </div>
 
+      <div class="drawer-item">
+        <span>固定导航栏</span>
+        <el-switch v-model="fixedHeader" class="drawer-switch" />
+      </div>
+      
     </div>
   </div>
 </template>
@@ -25,7 +30,18 @@ components: { ThemePicker },
   data() {
     return {}
   },
-  computed: {
+   computed: {
+    fixedHeader: {
+      get() {
+        return this.$store.state.settings.fixedHeader
+      },
+      set(val) {
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'fixedHeader',
+          value: val
+        })
+      }
+    },
     tagsView: {
       get() {
         return this.$store.state.settings.tagsView

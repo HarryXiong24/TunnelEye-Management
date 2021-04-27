@@ -149,4 +149,7 @@ export default {
 .theme-picker-dropdown .el-color-dropdown__link-btn {
   display: none;
 }
+.sd {
+  color: #e2ff40;
+}
 </style>
