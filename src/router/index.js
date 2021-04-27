@@ -46,11 +46,11 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/main',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
+      path: 'main',
+      name: 'Main',
+      component: () => import('@/views/main/index'),
       meta: { title: '主页', icon: 'dashboard' }
     }]
   },
@@ -96,7 +96,7 @@ export const constantRoutes = [
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
-      title: '消息发布',
+      title: '未知',
       icon: 'nested'
     },
     children: [
@@ -104,7 +104,7 @@ export const constantRoutes = [
         path: 'menu1',
         component: () => import('@/views/nested/menu1/index'), // Parent router-view
         name: 'Menu1',
-        meta: { title: '组织机构管理' },
+        meta: { title: 'Temp2' },
         children: [
           {
             path: 'menu1-1',
@@ -144,7 +144,20 @@ export const constantRoutes = [
         path: 'menu2',
         component: () => import('@/views/nested/menu2/index'),
         name: 'Menu2',
-        meta: { title: 'menu2' }
+        meta: { title: 'Temp1' }
+      }
+    ]
+  },
+
+  {
+    path: '/submitNews',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'submitNews',
+        component: () => import('@/views/submitNews/index'),
+        meta: { title: '发布新消息', icon: 'form' }
       }
     ]
   },
