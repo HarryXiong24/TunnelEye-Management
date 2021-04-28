@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function reqPersonInfo(date) {
+export function reqWorkEditor(date) {
   return request({
-    url: '/PersonInfo',
+    url: '/workEditor',
     method: 'get',
     params: date
   })

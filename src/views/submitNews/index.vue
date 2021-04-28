@@ -131,9 +131,11 @@
     },
     methods: {
       onSubmit(formName) {
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate( async (valid) => {
           if (valid) {
-            submitNews(this.form) 
+            // 未写完
+            console.log(JSON.stringify(this.form))
+            // let respone = await submitNews(this.form) 
             this.$alert('新消息发布成功!', '提示', {
               confirmButtonText: '确定',
               callback: (action) => {

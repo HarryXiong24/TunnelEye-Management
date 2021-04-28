@@ -14,7 +14,7 @@ import request from '@/utils/request'
 
 export function getInfo(token) {
   return request({
-    url: '/',
+    url: '/token',
     method: 'get',
     params: { token }
   })
@@ -22,7 +22,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/',
+    url: '/token',
     method: 'post'
   })
 }

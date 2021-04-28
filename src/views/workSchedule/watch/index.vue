@@ -65,15 +65,64 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+              type="success"
+              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
       </el-table>
+    </div>
+
+    <div class="workEditor">
+
+      <el-dialog title="信息修改" :visible.sync="dialogFormVisible" center>
+
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          
+          <el-form-item label="工号" prop="userid">
+            <el-input v-model="ruleForm.userid"></el-input>
+          </el-form-item>
+
+          <el-form-item label="姓名" prop="userName">
+            <el-input v-model="ruleForm.userName"></el-input>
+          </el-form-item>
+
+            <el-form-item label="性别" prop="sex">
+            <el-radio-group v-model="ruleForm.sex">
+              <el-radio label="男"></el-radio>
+              <el-radio label="女"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-form-item label="是否在岗" prop="state">
+            <el-radio-group v-model="ruleForm.state">
+              <el-radio label="在岗"></el-radio>
+              <el-radio label="未在岗"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          
+          <el-form-item label="到岗时间" required>
+            <el-col :span="11">
+              <el-date-picker
+                v-model="ruleForm.lockInTime"
+                type="datetime"
+                placeholder="选择日期时间"
+                default-time="12:00:00">
+              </el-date-picker>
+            </el-col>
+          </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="submitForm('ruleForm')">确认修改</el-button>
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+        </div>
+
+      </el-dialog>
     </div>
 
   </div>
@@ -82,12 +131,13 @@
 <script>
 import { reqPersonInfo } from '@/api/reqPersonInfo'
 import moment from 'moment';
+import { reqWorkEditor } from '@/api/workEditor'
 
 export default {
   data() {
     return {
       options: [],
-      value: -1, // 选项的值
+      value: '', // 选项的值
       label: '', // 选项的内容
       date: new Date('2020-06-01'),
 
@@ -96,7 +146,33 @@ export default {
       lists: [],
 
       resData: [],
-
+      
+      // 编辑表单
+      dialogFormVisible: false,
+      ruleForm: {
+        userid: null,
+        userName: '',
+        sex: '',
+        state: '',
+        lockInTime: null,
+      },
+      rules: {
+        userid: [
+          { required: true, message: '请填写工号', trigger: 'blur' }
+        ],
+        userName: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+        ],
+        lockInTime: [
+          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+        ],
+        sex: [
+          { required: true, message: '请选择性别', trigger: 'change' }
+        ],
+        state: [
+          { required: true, message: '请选择状态', trigger: 'change' }
+        ],
+      }
     }
   },
   methods: {
@@ -106,7 +182,7 @@ export default {
       let data = response.data
       this.resData = data
       this.options = []
-      this.value = -1
+      this.value = ''
       this.label = ''
      
       data.forEach( (value) => {
@@ -116,18 +192,14 @@ export default {
         }
         this.options.push(params)
       })
-      console.log(this.options)
     },
     async init() {
       // 异步的方法，一定要await
       await this.getPersonInfo()
-      console.log(this.options)
-      console.log(this.options[0].value)
       this.value = this.options[0].value
       this.groupShow(this.value)  
     },
     groupShow(value) {
-      console.log(value)
       for (let i = 0; i < this.resData.length; i++) {
         if (value === this.resData[i].groupId) {
           this.tableData = this.resData[i].users
@@ -135,16 +207,30 @@ export default {
       }
     },
     handleEdit(index, row) {
-      console.log(index, row);
+      this.ruleForm.userid = row.userid
+      this.ruleForm.userName = row.userName
+      this.ruleForm.sex = row.sex
+      this.ruleForm.state = row.state
+      this.ruleForm.lockInTime = new Date()
+      this.dialogFormVisible = true;
     },
     handleDelete(index, row) {
       console.log(index, row);
     },
-    // async update() {
-    //   await this.submit()
-    //   this.normal.value = this.options[0]
-    //   this.groupShow(this.normal.value)
-    // }
+    submitForm(formName) {
+      this.$refs[formName].validate( async (valid) => {
+        if (valid) {
+          // 未写完
+          console.log(JSON.stringify(this.ruleForm))
+          // let response = await reqWorkEditor(this.ruleForm)
+          
+          this.dialogFormVisible = false
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    }
   },
   mounted() {
     this.init()

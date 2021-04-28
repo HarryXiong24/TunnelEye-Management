@@ -266,7 +266,7 @@ $font:#2d3a4b;
   }
 
   .form-item {
-    background-color: #37383a;
+    background-color: #332f2f;
   }
 
   .svg-container {

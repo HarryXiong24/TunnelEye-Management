@@ -51,14 +51,14 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
 
-        const userInfo = JSON.parse(decrypt(sessionStorage.getItem('userInfo')))
-
+        // console.log(response)
         const { data } = response
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
         // const { name, avatar } = data
 
+        const userInfo = JSON.parse(decrypt(sessionStorage.getItem('userInfo')))
         commit('SET_NAME', userInfo.userName)
         // commit('SET_AVATAR', avatar)
         resolve(data)
