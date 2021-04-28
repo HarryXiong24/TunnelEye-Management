@@ -150,9 +150,22 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'submitNews',
+        name: 'SubmitNews',
         component: () => import('@/views/submitNews/index'),
         meta: { title: '发布新消息', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/frontendShow',
+    component: Layout,
+    children: [
+      {
+        path: 'frontendShow',
+        name: 'FrontendShow',
+        component: () => import('@/views/frontendShow/index'),
+        meta: { title: '手机端数据展示', icon: 'guide' }
       }
     ]
   },
