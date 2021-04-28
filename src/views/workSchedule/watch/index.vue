@@ -20,6 +20,7 @@
           <el-option
             v-for="item in options"
             :key="item.value"
+            :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
@@ -86,13 +87,16 @@ export default {
   data() {
     return {
       options: [],
-      value: '',
+      value: -1, // 选项的值
+      label: '', // 选项的内容
       date: new Date('2020-06-01'),
 
       tableData: [],
       search: '',
+      lists: [],
 
-      groupId: -1
+      resData: [],
+
     }
   },
   methods: {
@@ -100,24 +104,33 @@ export default {
       let date = {date: moment(this.date).format('YYYY-MM-DD')}
       let response = await reqPersonInfo(date)
       let data = response.data
+      this.resData = data
       this.options = []
-      this.value = ''
-
-      this.tableData = []
-      this.groupId = -1
+      this.value = -1
+      this.label = ''
      
       data.forEach( (value) => {
-        let params = { value: value.groupName }
+        let params = { 
+          value: value.groupId,
+          label: value.groupName 
+        }
         this.options.push(params)
-        this.tableData.push(value.users)
       })
+      console.log(this.options)
+    },
+    async init() {
+      // 异步的方法，一定要await
+      await this.getPersonInfo()
+      console.log(this.options)
+      console.log(this.options[0].value)
       this.value = this.options[0].value
-      console.log(this.value)
+      this.groupShow(this.value)  
     },
     groupShow(value) {
-      for (let i = 0; i < this.options.length; i++) {
-        if (value === this.options[i]) {
-          this.groupId = i;
+      console.log(value)
+      for (let i = 0; i < this.resData.length; i++) {
+        if (value === this.resData[i].groupId) {
+          this.tableData = this.resData[i].users
         }
       }
     },
@@ -134,9 +147,7 @@ export default {
     // }
   },
   mounted() {
-    this.getPersonInfo()
-    this.value = this.options[0].value
-    this.groupShow(this.value)
+    this.init()
   },
 }
 </script>
