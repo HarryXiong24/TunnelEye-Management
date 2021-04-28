@@ -62,139 +62,87 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/main/index'),
-      meta: { title: '主页', icon: 'dashboard' }
+      meta: { title: '主页', icon: 'example' }
     }]
   },
 
   {
-    path: '/example',
+    path: '/systemManage',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: '系统配置管理', icon: 'el-icon-s-help' },
+    redirect: '/systemManage/devManage',
+    name: 'SystemManage',
+    meta: { title: '系统配置管理', icon: 'chart' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'devManage',
+        name: 'DevManage',
+        component: () => import('@/views/systemManage/devManage/index'),
+        meta: { title: '下位机管理', icon: 'dashboard' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'sensorManage',
+        name: 'SensorManage',
+        component: () => import('@/views/systemManage/sensorManage/index'),
+        meta: { title: '传感器管理', icon: 'tab' }
+      },
+      {
+        path: 'UWBManage',
+        name: 'UWBManage',
+        component: () => import('@/views/systemManage/UWBManage/index'),
+        meta: { title: 'UWB系统管理', icon: 'component' }
+      },
+      {
+        path: 'UWBTagManage',
+        name: 'UWBTagManage',
+        component: () => import('@/views/systemManage/UWBTagManage/index'),
+        meta: { title: 'UWB标签管理', icon: 'star' }
       }
     ]
   },
 
   {
-    path: '/form',
+    path: '/groupManage',
     component: Layout,
+    redirect: '/groupManage/departmentManage',
+    name: 'GroupManage',
+    meta: { title: '组织机构管理', icon: 'tree-table' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '人员及组织机构管理', icon: 'form' }
+        path: 'departmentManage',
+        name: 'DepartmentManage',
+        component: () => import('@/views/groupManage/departmentManage/index'),
+        meta: { title: '部门管理', icon: 'tree' }
+      },
+      {
+        path: 'userManage',
+        name: 'UserManage',
+        component: () => import('@/views/groupManage/userManage/index'),
+        meta: { title: '用户信息管理', icon: 'peoples' }
       }
     ]
   },
 
   {
-    path: '/nested',
+    path: '/workManage',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: '未知',
-      icon: 'nested'
-    },
+    redirect: '/workManage/watch',
+    name: 'WorkManage',
+    meta: { title: '施工人员管理', icon: 'nested' },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Temp2' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
+        path: 'manageGroup',
+        name: 'ManageGroup',
+        component: () => import('@/views/workSchedule/manageGroup/index'),
+        meta: { title: '班组成员管理', icon: 'table' }
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'Temp1' }
+        path: 'manageWork',
+        name: 'ManageWork',
+        component: () => import('@/views/workSchedule/manageWork/index'),
+        meta: { title: '值班排班管理', icon: 'skill' }
       }
     ]
   },
-
-  {
-    path: '/workSchedule',
-    component: Layout,
-    redirect: '/workSchedule/watch',
-    name: 'WorkSchedule',
-    meta: { title: '值班排班管理', icon: 'nested' },
-    children: [
-      {
-        path: 'watch',
-        name: 'Watch',
-        component: () => import('@/views/workSchedule/watch/index'),
-        meta: { title: '查询排班信息', icon: 'table' }
-      },
-      {
-        path: 'submit',
-        name: 'Submit',
-        component: () => import('@/views/workSchedule/submit/index'),
-        meta: { title: '发布值班信息', icon: 'tree' }
-      }
-    ]
-  },
-
-
-  // {
-  //   path: '/workSchedule',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'WorkSchedule',
-  //       component: () => import('@/views/workSchedule/index'),
-  //       meta: { title: '值班排班管理', icon: 'table' }
-  //     }
-  //   ]
-  // },
 
   {
     path: '/submitNews',
@@ -209,6 +157,81 @@ export const constantRoutes = [
     ]
   },
 
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
+
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: () => import('@/views/form/index'),
+  //       meta: { title: '人员及组织机构管理', icon: 'form' }
+  //     }
+  //   ]
+  // },
+
+  // {
+  //   path: '/nested',
+  //   component: Layout,
+  //   redirect: '/nested/menu1',
+  //   name: 'Nested',
+  //   meta: {
+  //     title: '未知',
+  //     icon: 'nested'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'menu1',
+  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
+  //       name: 'Menu1',
+  //       meta: { title: 'Temp2' },
+  //       children: [
+  //         {
+  //           path: 'menu1-1',
+  //           component: () => import('@/views/nested/menu1/menu1-1'),
+  //           name: 'Menu1-1',
+  //           meta: { title: 'Menu1-1' }
+  //         },
+  //         {
+  //           path: 'menu1-2',
+  //           component: () => import('@/views/nested/menu1/menu1-2'),
+  //           name: 'Menu1-2',
+  //           meta: { title: 'Menu1-2' },
+  //           children: [
+  //             {
+  //               path: 'menu1-2-1',
+  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+  //               name: 'Menu1-2-1',
+  //               meta: { title: 'Menu1-2-1' }
+  //             },
+  //             {
+  //               path: 'menu1-2-2',
+  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+  //               name: 'Menu1-2-2',
+  //               meta: { title: 'Menu1-2-2' }
+  //             }
+  //           ]
+  //         },
+  //         {
+  //           path: 'menu1-3',
+  //           component: () => import('@/views/nested/menu1/menu1-3'),
+  //           name: 'Menu1-3',
+  //           meta: { title: 'Menu1-3' }
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       path: 'menu2',
+  //       component: () => import('@/views/nested/menu2/index'),
+  //       name: 'Menu2',
+  //       meta: { title: 'Temp1' }
+  //     }
+  //   ]
+  // },
+
   // {
   //   path: 'external-link',
   //   component: Layout,
@@ -219,9 +242,6 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
