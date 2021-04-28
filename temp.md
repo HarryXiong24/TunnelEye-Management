@@ -6,7 +6,7 @@ url: /submitNews
 method: get
 params: data
 
-example: 
+example:
 {
   "title":"奥术大师大",
   "name":"asd",

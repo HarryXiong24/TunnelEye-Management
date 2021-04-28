@@ -39,14 +39,12 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
-// import ThemePicker from '@/components/ThemePicker'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     Screenfull,
-    // ThemePicker
   }, 
   computed: {
     ...mapGetters([

@@ -27,12 +27,18 @@
       </div>
 
       <div class="item">
-        <el-button type="primary" @click="addWorker">新增成员</el-button>
+        <el-button type="primary" @click="addWorker" icon="el-icon-plus">新增成员</el-button>
       </div>
       
       <div class="item">
-        <el-button type="primary" @click="refresh">刷新信息</el-button>
+        <el-button type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
       </div>
+
+      <div class="item">
+        <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+          导出Excel
+        </el-button>
+      </div>     
 
     </div>
 
@@ -188,9 +194,12 @@
 <script>
 import { reqPersonInfo } from '@/api/reqPersonInfo'
 import moment from 'moment';
+import waves from '@/directive/waves' // waves directive
+import { parseTime } from '@/utils'
 import { reqWorkerEditor, reqDeleteWorker, addWorker } from '@/api/workerEditor'
 
 export default {
+  directives: { waves },
   data() {
     return {
       options: [],
@@ -204,6 +213,10 @@ export default {
 
       resData: [],
       
+      // 导出Excel的属性
+      downloadLoading: false,
+      excelTitle: '',
+
       // 编辑表单
       dialogFormVisible: false,
       ruleForm: {
@@ -286,6 +299,7 @@ export default {
     groupShow(value) {
       for (let i = 0; i < this.resData.length; i++) {
         if (value === this.resData[i].groupId) {
+          this.excelTitle = this.resData[i].groupName
           this.tableData = this.resData[i].users
         }
       }
@@ -360,7 +374,32 @@ export default {
     },
     refresh() {
       this.init()
-    }
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['工号', '姓名', '性别', '是否在岗', '到岗时间']
+        const filterVal = ['userid', 'userName', 'sex', 'state', 'clockInTime']
+        const data = this.formatJson(filterVal)
+        console.table(this.tableData)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.excelTitle + "-" + parseTime(this.date)        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal) {
+      return this.tableData.map(v => filterVal.map(j => {
+        console.table(v[j])
+        if (j === 'lockInTime') {
+          // return parseTime(v[j])
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
+    },
   },
   mounted() {
     this.init()
