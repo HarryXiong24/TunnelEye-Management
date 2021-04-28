@@ -161,6 +161,42 @@ export const constantRoutes = [
   },
 
   {
+    path: '/workSchedule',
+    component: Layout,
+    redirect: '/workSchedule/watch',
+    name: 'WorkSchedule',
+    meta: { title: '值班排班管理', icon: 'nested' },
+    children: [
+      {
+        path: 'watch',
+        name: 'Watch',
+        component: () => import('@/views/workSchedule/watch/index'),
+        meta: { title: '查询排班信息', icon: 'table' }
+      },
+      {
+        path: 'submit',
+        name: 'Submit',
+        component: () => import('@/views/workSchedule/submit/index'),
+        meta: { title: '发布值班信息', icon: 'tree' }
+      }
+    ]
+  },
+
+
+  // {
+  //   path: '/workSchedule',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'WorkSchedule',
+  //       component: () => import('@/views/workSchedule/index'),
+  //       meta: { title: '值班排班管理', icon: 'table' }
+  //     }
+  //   ]
+  // },
+
+  {
     path: '/submitNews',
     component: Layout,
     children: [
