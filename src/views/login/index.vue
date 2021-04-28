@@ -11,7 +11,7 @@
         <h3 class="title">隧道环境及人员检测管理系统</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="username" class="form-item">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -26,7 +26,7 @@
         />
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="password" class="form-item">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
@@ -46,7 +46,7 @@
         </span>
       </el-form-item>
 
-      <el-form-item prop="captcha" class="captcha-content">
+      <el-form-item prop="captcha" class="captcha-content form-item">
         <span class="svg-container">
           <i class="el-icon-loading"></i>
         </span>
@@ -235,11 +235,13 @@ $cursor: #fff;
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
+$light_bg:#eee;
+$font:#2d3a4b;
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: $light_bg;
   overflow: hidden;
 
   .logo-container {
@@ -248,7 +250,7 @@ $light_gray:#eee;
     justify-content: center;
     align-content: center;
     .logo {
-      margin: 30px auto 0 auto;
+      margin: 24px auto 0 auto;
       height: 120px;
       width: 120px;
     }
@@ -263,9 +265,13 @@ $light_gray:#eee;
     overflow: hidden;
   }
 
+  .form-item {
+    background-color: #37383a;
+  }
+
   .svg-container {
     padding: 6px 5px 6px 15px;
-    color: $dark_gray;
+    color: $light_gray;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
@@ -276,7 +282,7 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: $font;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
@@ -305,7 +311,7 @@ $light_gray:#eee;
 
   .bio-container {
     font-size: 10px;
-    color: rgb(214, 213, 213);
+    color: $font;
     position: absolute;
     bottom: 5px;
     right: 20px;
