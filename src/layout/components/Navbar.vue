@@ -1,12 +1,12 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
+      <el-dropdown class="avatar-container" trigger="click" id="avatar-container">
+        <div class="avatar-wrapper hover-effect right-menu-item">
           <i class="el-icon-setting"/>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -29,6 +29,8 @@
 
       </template>
 
+      <guide id="guide" class="right-menu-item hover-effect"></guide>
+
     </div>
 
   </div>
@@ -39,12 +41,14 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
+import Guide from '@/components/Guide'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     Screenfull,
+    Guide,
   }, 
   computed: {
     ...mapGetters([
@@ -71,7 +75,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .navbar {
   height: 50px;
   overflow: hidden;
@@ -114,7 +118,6 @@ export default {
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      margin: 0 10px;
 
       &.hover-effect {
         cursor: pointer;

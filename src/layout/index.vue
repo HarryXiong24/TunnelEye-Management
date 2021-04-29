@@ -4,12 +4,12 @@
     <sidebar class="sidebar-container" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
+        <navbar id="nav-container" />
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
       <right-panel v-if="showSettings">
-        <settings />
+        <settings id="rightPanel-container"/>
       </right-panel>
     </div>
   </div>
