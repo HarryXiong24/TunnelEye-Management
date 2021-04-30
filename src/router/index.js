@@ -77,26 +77,32 @@ export const constantRoutes = [
         path: 'devManage',
         name: 'DevManage',
         component: () => import('@/views/systemManage/devManage/index'),
-        meta: { title: '下位机管理', icon: 'dashboard' }
+        meta: { title: '下位机管理', icon: 'component' }
       },
       {
-        path: 'sensorManage',
-        name: 'SensorManage',
-        component: () => import('@/views/systemManage/sensorManage/index'),
-        meta: { title: '传感器管理', icon: 'tab' }
+        path: 'devConfig',
+        name: 'DevConfig',
+        component: () => import('@/views/systemManage/devConfig/index'),
+        meta: { title: '下位机配置管理', icon: 'dashboard' }
       },
       {
         path: 'UWBManage',
         name: 'UWBManage',
         component: () => import('@/views/systemManage/UWBManage/index'),
-        meta: { title: 'UWB系统管理', icon: 'component' }
+        meta: { title: 'UWB系统管理', icon: 'list' }
       },
       {
         path: 'UWBTagManage',
         name: 'UWBTagManage',
         component: () => import('@/views/systemManage/UWBTagManage/index'),
         meta: { title: 'UWB标签管理', icon: 'star' }
-      }
+      },      
+      {
+        path: 'sensorManage',
+        name: 'SensorManage',
+        component: () => import('@/views/systemManage/sensorManage/index'),
+        meta: { title: '传感器管理', icon: 'tab' }
+      },
     ]
   },
 

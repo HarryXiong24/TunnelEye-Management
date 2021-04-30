@@ -48,6 +48,7 @@
         :data="tableData.filter(data => !search || data.userName.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%">
         <el-table-column
+          sortable
           label="工号"
           prop="userid">
         </el-table-column>

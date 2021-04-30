@@ -189,7 +189,7 @@
         </el-form>
 
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submitAddForm('addForm')">确认修改</el-button>
+          <el-button type="primary" @click="submitAddForm('addForm')">确认新增</el-button>
           <el-button @click="resetAddForm('addForm')">重置</el-button>
           <el-button @click="addFormVisible = false">取 消</el-button>
         </div>
@@ -210,7 +210,7 @@
 </template>
 
 <script>
-import { reqDev, addDev, deleteDev, reviewDev } from '@/api/systemManage'
+import { reqDev, addDev, deleteDev, reviewDev } from '@/api/devManage'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -318,6 +318,7 @@ export default {
       this.ruleForm.devAddress = row.devAddress
       this.ruleForm.status = String(row.status)
       // this.ruleForm.onlineLastTime = new Date()
+      this.ruleForm.remark = row.remark
       this.dialogFormVisible = true;
     },
     handleDelete(index, row) {
@@ -343,7 +344,6 @@ export default {
       });
     },
     submitForm(formName) {
-      console.log(this.ruleForm.devNo)
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
           // 有问题待讨论解决

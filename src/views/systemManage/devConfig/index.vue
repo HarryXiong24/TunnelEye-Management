@@ -1,10 +1,10 @@
 <template>
-  <div class="UWBTagManage">
+  <div class="devConfig">
  
     <div class="nav">
       
       <div class="item">
-        <el-button type="primary" @click="addNew" icon="el-icon-plus">新增UWB标签信息</el-button>
+        <el-button type="primary" @click="addNew" icon="el-icon-plus">新增配置</el-button>
       </div>
       
       <div class="item">
@@ -19,40 +19,55 @@
 
     </div>
 
-    <div class="title">所有UWB标签信息</div>
+    <div class="title">所有下位机配置信息</div>
 
     <div class="table">
 
       <el-table
-        :data="tableData.filter(data => !search || String(data.labelId).includes(search))"
+        :data="tableData.filter(data => !search || String(data.configId).includes(search))"
         style="width: 100%">
         <el-table-column
           sortable
           min-width="80"
-          label="标签ID"
-          prop="labelId">
+          label="配置ID"
+          prop="configId">
         </el-table-column>
         <el-table-column
           sortable
           min-width="80"
-          label="系统ID"
-          prop="sysId">
-        </el-table-column>
-        <el-table-column
-          min-width="80"
-          label="标签编号"
-          prop="labelNo">
+          label="节点ID"
+          prop="nodeId">
         </el-table-column>
         <el-table-column
           sortable
           min-width="80"
-          label="标签地址码"
-          prop="labelAdd">
+          label="串口号"
+          prop="serialNum">
         </el-table-column>
         <el-table-column
-          min-width="120"
-          label="安装时间"
-          prop="importTime">
+          sortable
+          min-width="80"
+          label="波特率"
+          prop="baud">
+        </el-table-column>
+        <el-table-column
+          label="通信端口号"
+          prop="port">
+        </el-table-column>
+        <el-table-column
+          min-width="70"
+          label="检验位"
+          prop="checkBit">
+        </el-table-column>
+        <el-table-column
+          min-width="70"
+          label="数据位"
+          prop="dataBit">
+        </el-table-column>
+        <el-table-column
+          min-width="70"
+          label="停止位"
+          prop="stopBit">
         </el-table-column>
         <el-table-column
           label="备注"
@@ -66,7 +81,7 @@
             <el-input
               v-model="search"
               size="mini"
-              placeholder="输入标签ID搜索"/>
+              placeholder="输入配置ID搜索"/>
           </template>
           <template slot-scope="scope">
             <el-button
@@ -86,35 +101,40 @@
 
     <div class="workEditor">
 
-      <el-dialog title="信息修改" :visible.sync="dialogFormVisible" center>
+      <el-dialog title="配置修改" :visible.sync="dialogFormVisible" center>
 
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           
-          <el-form-item label="标签ID" prop="labelId">
-            <el-input v-model.number="ruleForm.labelId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
-          </el-form-item> 
-
-          <el-form-item label="系统ID" prop="sysId">
-            <el-input v-model.number="ruleForm.sysId"></el-input>
+          <el-form-item label="配置ID" prop="configId">
+            <el-input v-model="ruleForm.configId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
           </el-form-item>
 
-          <el-form-item label="标签编号" prop="labelNo">
-            <el-input v-model="ruleForm.labelNo"></el-input>
+          <el-form-item label="node节点ID" prop="nodeId">
+            <el-input v-model.number="ruleForm.nodeId"></el-input>
           </el-form-item>
 
-          <el-form-item label="标签地址码" prop="labelAdd">
-            <el-input v-model.number="ruleForm.labelAdd"></el-input>
+          <el-form-item label="串口号" prop="serialNum">
+            <el-input v-model.number="ruleForm.serialNum"></el-input>
           </el-form-item>
 
-          <el-form-item label="标签安装时间" required>
-            <el-col :span="11">
-              <el-date-picker
-                v-model="ruleForm.importTime"
-                type="datetime"
-                placeholder="选择日期时间"
-                default-time="12:00:00">
-              </el-date-picker>
-            </el-col>
+          <el-form-item label="波特率" prop="baud">
+            <el-input v-model.number="ruleForm.baud"></el-input>
+          </el-form-item>
+
+          <el-form-item label="通信端口号" prop="port">
+            <el-input v-model.number="ruleForm.port"></el-input>
+          </el-form-item>
+
+          <el-form-item label="检验位" prop="checkBit">
+            <el-input v-model.number="ruleForm.checkBit"></el-input>
+          </el-form-item>
+
+          <el-form-item label="数据位" prop="dataBit">
+            <el-input v-model.number="ruleForm.dataBit"></el-input>
+          </el-form-item>
+
+          <el-form-item label="停止位" prop="stopBit">
+            <el-input v-model.number="ruleForm.stopBit"></el-input>
           </el-form-item>
 
           <el-form-item label="备注" prop="remark">
@@ -133,35 +153,40 @@
 
      <div class="addEditor">
 
-      <el-dialog title="新增UWB标签信息" :visible.sync="addFormVisible" center>
+      <el-dialog title="新增配置" :visible.sync="addFormVisible" center>
 
         <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="100px" class="demo-ruleForm">
           
-          <el-form-item label="标签ID" prop="labelId">
-            <el-input v-model.number="addForm.labelId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
-          </el-form-item> 
-
-          <el-form-item label="系统ID" prop="sysId">
-            <el-input v-model.number="addForm.sysId"></el-input>
+          <el-form-item label="配置ID" prop="configId">
+            <el-input v-model="addForm.configId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
           </el-form-item>
 
-          <el-form-item label="标签编号" prop="labelNo">
-            <el-input v-model="addForm.labelNo"></el-input>
+          <el-form-item label="node节点ID" prop="nodeId">
+            <el-input v-model.number="addForm.nodeId"></el-input>
           </el-form-item>
 
-          <el-form-item label="标签地址码" prop="labelAdd">
-            <el-input v-model.number="addForm.labelAdd"></el-input>
+          <el-form-item label="串口号" prop="serialNum">
+            <el-input v-model.number="addForm.serialNum"></el-input>
           </el-form-item>
 
-          <el-form-item label="标签安装时间" required>
-            <el-col :span="11">
-              <el-date-picker
-                v-model="addForm.importTime"
-                type="datetime"
-                placeholder="选择日期时间"
-                default-time="12:00:00">
-              </el-date-picker>
-            </el-col>
+          <el-form-item label="波特率" prop="baud">
+            <el-input v-model.number="addForm.baud"></el-input>
+          </el-form-item>
+
+          <el-form-item label="通信端口号" prop="port">
+            <el-input v-model.number="addForm.port"></el-input>
+          </el-form-item>
+
+          <el-form-item label="检验位" prop="checkBit">
+            <el-input v-model.number="addForm.checkBit"></el-input>
+          </el-form-item>
+
+          <el-form-item label="数据位" prop="dataBit">
+            <el-input v-model.number="addForm.dataBit"></el-input>
+          </el-form-item>
+
+          <el-form-item label="停止位" prop="stopBit">
+            <el-input v-model.number="addForm.stopBit"></el-input>
           </el-form-item>
 
           <el-form-item label="备注" prop="remark">
@@ -192,7 +217,7 @@
 </template>
 
 <script>
-import { reqUWBTagManage, addUWBTagManage, deleteUWBTagManage, reviewUWBTagManage } from '@/api/UWBTagManage'
+import { reqDevConfig, addDevConfig, deleteDevConfig, reviewDevConfig } from '@/api/devConfig'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
@@ -224,55 +249,83 @@ export default {
       // 编辑表单
       dialogFormVisible: false,
       ruleForm: {
-        labelId: null,
-        sysId: null,
-        labelNo: '',
-        labelAdd: null,
-        importTime: '',
+        configId: null,
+        nodeId: null,
+        serialNum: null,
+        baud: null,
+        port: null,
+        checkBit: null,
+        dataBit: null,
+        stopBit: null,
         remark: '',
       },
       rules: {
-        sysId: [
-          { required: true, message: '请输入系统ID', trigger: 'blur' },
-          { type: 'number', message: '系统ID必须为数字', trigger: 'blur'}
+        nodeId: [
+          { required: true, message: '请输入节点ID', trigger: 'blur' },
+          { type: 'number', message: '节点ID必须为数字', trigger: 'blur'}
         ],
-        labelNo: [
-          { required: true, message: '请输入标签编号', trigger: 'blur' },  
+        serialNum: [
+          { required: true, message: '请输入串口号', trigger: 'blur' },
+          { type: 'number', message: '串口号必须为数字', trigger: 'blur'}
         ],
-        labelAdd: [
-          { required: true, message: '请输入标签地址码', trigger: 'blur' },
-          { type: 'number', message: '标签地址必须为数字', trigger: 'blur'}
+        baud: [
+          { required: true, message: '请输入波特率', trigger: 'blur' },
+          { type: 'number', message: '波特率必须为数字', trigger: 'blur'}
         ],
-        importTime: [
-          { type: 'datetime', trigger: 'blur'}
-        ]
+        port: [
+          { required: true, message: '请输入通信端口号', trigger: 'blur' },
+          { type: 'number', message: '通信端口号必须为数字', trigger: 'blur'}
+        ],
+        checkBit: [
+          { validator: validateNumber, trigger: 'blur'}, 
+        ],
+        dataBit: [
+          { validator: validateNumber, trigger: 'blur'},
+        ],
+        stopBit: [
+          { validator: validateNumber, trigger: 'blur'},
+        ],
       },
 
       // 新增信息的属性
       addFormVisible: false,
       addForm: {
-        labelId: null,
-        sysId: null,
-        labelNo: '',
-        labelAdd: null,
-        importTime: '',
+        configId: null,
+        nodeId: null,
+        serialNum: null,
+        baud: null,
+        port: null,
+        checkBit: null,
+        dataBit: null,
+        stopBit: null,
         remark: '',
       },
       addRules: {
-        sysId: [
-          { required: true, message: '请输入系统ID', trigger: 'blur' },
-          { type: 'number', message: '系统ID必须为数字', trigger: 'blur'}
+        nodeId: [
+          { required: true, message: '请输入节点ID', trigger: 'blur' },
+          { type: 'number', message: '节点ID必须为数字', trigger: 'blur'}
         ],
-        labelNo: [
-          { required: true, message: '请输入标签编号', trigger: 'blur' },  
+        serialNum: [
+          { required: true, message: '请输入串口号', trigger: 'blur' },
+          { type: 'number', message: '串口号必须为数字', trigger: 'blur'}
         ],
-        labelAdd: [
-          { required: true, message: '请输入标签地址码', trigger: 'blur' },
-          { type: 'number', message: '标签地址必须为数字', trigger: 'blur'}
+        baud: [
+          { required: true, message: '请输入波特率', trigger: 'blur' },
+          { type: 'number', message: '波特率必须为数字', trigger: 'blur'}
         ],
-        importTime: [
-          { type: 'datetime', trigger: 'blur'}
-        ]
+        port: [
+          { required: true, message: '请输入通信端口号', trigger: 'blur' },
+          { type: 'number', message: '通信端口号必须为数字', trigger: 'blur'}
+        ],
+        checkBit: [
+          { validator: validateNumber, trigger: 'blur'}, 
+        ],
+        dataBit: [
+          { validator: validateNumber, trigger: 'blur'},
+        ],
+        stopBit: [
+          { validator: validateNumber, trigger: 'blur'},
+        ],
       }
     }
   },
@@ -283,7 +336,7 @@ export default {
         page: page,
         limit: 10
       }
-      let respone = await reqUWBTagManage(data)
+      let respone = await reqDevConfig(data)
       let result = respone.data
 
       this.count = result.count
@@ -295,11 +348,14 @@ export default {
       this.getDevInfo(val)
     },
     handleEdit(index, row) {
-      this.ruleForm.labelId = row.labelId
-      this.ruleForm.sysId = row.sysId      
-      this.ruleForm.labelNo = row.labelNo
-      this.ruleForm.labelAdd = row.labelAdd
-      this.ruleForm.importTime = row.importTime
+      this.ruleForm.configId = row.configId      
+      this.ruleForm.nodeId = row.nodeId
+      this.ruleForm.serialNum = row.serialNum
+      this.ruleForm.baud = row.baud
+      this.ruleForm.port = row.port
+      this.ruleForm.checkBit = row.checkBit
+      this.ruleForm.dataBit = row.dataBit
+      this.ruleForm.stopBit = row.stopBit
       this.ruleForm.remark = row.remark
       
       this.dialogFormVisible = true;
@@ -310,9 +366,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then( async () => {
-        let response = await deleteUWBTagManage( row.labelId, row)
+        let response = await deleteDevConfig( row.configId, row)
         let msg = response.data.msg
-       
+        // 这里后台有bug,若要删除的记录被从表关联了，则不能删除，待处理
         this.$message({
           type: 'success',
           message: msg
@@ -331,13 +387,16 @@ export default {
         if (valid) {
           // 有问题待讨论解决
           let data = {
-            sysId: this.ruleForm.sysId,
-            labelNo: this.ruleForm.labelNo,
-            labelAdd: this.ruleForm.labelAdd,
-            importTime: moment(this.ruleForm.importTime).format('YYYY-MM-DD-HH:mm:ss'),
+            nodeId: this.ruleForm.nodeId,
+            serialNum: this.ruleForm.serialNum,
+            baud: this.ruleForm.baud,
+            port: this.ruleForm.port,
+            checkBit: this.ruleForm.checkBit,
+            dataBit: this.ruleForm.dataBit,
+            stopBit: this.ruleForm.stopBit,
             remark: this.ruleForm.remark,
           }
-          let response = await reviewUWBTagManage(this.ruleForm.labelId, data)
+          let response = await reviewDevConfig(this.ruleForm.configId, data)
           let msg = response.data.msg
           this.$message({
             type: 'success',
@@ -362,13 +421,16 @@ export default {
         if (valid) {
           // 有问题待讨论解决
           let data = {
-            sysId: this.addForm.sysId,
-            labelNo: this.addForm.labelNo,
-            labelAdd: this.addForm.labelAdd,
-            importTime: moment(this.addForm.importTime).format('YYYY-MM-DD-HH:mm:ss'),
+            nodeId: this.addForm.nodeId,
+            serialNum: this.addForm.serialNum,
+            baud: this.addForm.baud,
+            port: this.addForm.port,
+            checkBit: this.addForm.checkBit,
+            dataBit: this.addForm.dataBit,
+            stopBit: this.addForm.stopBit,
             remark: this.addForm.remark,
           }
-          let response = await addUWBTagManage(data)
+          let response = await addDevConfig(data)
           let msg = response.data.msg
           this.$message({
             type: 'success',
@@ -392,13 +454,13 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['标签ID', '系统ID', '标签编码', '标签地址码', '标签安装时间', '备注']
-        const filterVal = ['labelId', 'sysId', 'labelNo', 'labelAdd', 'importTime', 'remark']
+        const tHeader = ['配置ID', '节点ID', '串口号', '波特率', '检验位', '数据位', '停止位', '备注']
+        const filterVal = ['configId', 'nodeId', 'serialNum', 'baud', 'checkBit', 'dataBit', 'stopBit', 'remark']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: "第" + this.page + "页UWB标签信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss') })
+          filename: "第" + this.page + "页下位机配置信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss') })
         this.downloadLoading = false
       })
     },
@@ -420,7 +482,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .UWBTagManage {
+  .devConfig {
     width: 100%;
     height: 100%;
     margin: 20px;

@@ -67,10 +67,10 @@ const steps = [
     padding: 0
   },
   {
-    element: '#rightPanel-container',
+    element: '#rightPanel',
     popover: {
-      title: '系统设置',
-      description: '进行更换主题, 固定导航栏, 取消页面标签等操作',
+      title: '使用导航',
+      description: '让您熟练的使用本系统',
       position: 'left'
     }
   },
