@@ -44,7 +44,7 @@ export default {
       if (screenfull.isEnabled) {
         screenfull.off('change', this.change)
       }
-    }
+    },
   }
 }
 </script>

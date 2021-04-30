@@ -15,6 +15,9 @@
               回到主页
             </el-dropdown-item>
           </router-link>
+          <el-dropdown-item divided @click.native.prevent.stop="guide">
+            <span style="display:block;">使用帮助</span>
+          </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
@@ -42,6 +45,9 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import Guide from '@/components/Guide'
+import Driver from 'driver.js' // import driver.js
+import 'driver.js/dist/driver.min.css' // import driver.js css
+import steps from '@/components/Guide/steps'
 
 export default {
   components: {
@@ -57,6 +63,11 @@ export default {
       'device'
     ])
   },
+  data() {
+    return {
+      driver: null
+    }
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -65,12 +76,13 @@ export default {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
-    // themeChange(val) {
-    //   this.$store.dispatch('settings/changeSetting', {
-    //     key: 'theme',
-    //     value: val
-    //   })
-    // }
+    guide() {
+      this.driver.defineSteps(steps)
+      this.driver.start()
+    }
+  },
+  mounted() {
+    this.driver = new Driver()
   },
 }
 </script>

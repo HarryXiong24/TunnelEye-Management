@@ -170,22 +170,23 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/guide',
-    component: Layout,
-    children: [
-      {
-        path: 'guide',
-        name: 'Guide',
-        component: () => import('@/views/guide/index'),
-        meta: { title: '系统使用说明', icon: 'eye-open' }
-      }
-    ]
-  },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 
+  
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'guide',
+  //       name: 'Guide',
+  //       component: () => import('@/views/guide/index'),
+  //       meta: { title: '系统使用说明', icon: 'eye-open' }
+  //     }
+  //   ]
+  // },
+  
   // {
   //   path: '/form',
   //   component: Layout,
