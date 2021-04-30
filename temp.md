@@ -1,6 +1,28 @@
 # 接口
 
-## 发布新消息
+## 
+
+## 出现的bug
+
+### 接口1.2和1.4
+
+{
+  "devNo": 1,
+  "devName": "下位机1",
+  "devAddress": "成都地铁一号线",
+  "status": 1,
+  "remark": "下位机1:成都地铁一号线"
+}
+
+经测试，只能传这五个，多传就会报错
+还差一个最近在线时间，待和老师讨论解决
+
+### 接口1.3
+
+若要删除的记录被从表关联了，则不能删除
+待和老师讨论解决
+
+## 发布新消息的接口
 
 url: /submitNews
 method: get
@@ -22,49 +44,6 @@ example:
   msg: "发布成功"
 }
 
-## 修改一个人的出勤信息
-
-url: '/workEditor',
-method: 'get',
-params: data
-
-example:
-{
-  "userid":1,
-  "userName":"华雄",
-  "sex":"男",
-  "state":"在岗",
-  "lockInTime":"2021-04-28T09:22:41.579Z"
-}
-
-备注: 接受成功需要返回一个对象，要包含一个成功码、信息，比如:
-{
-  code: 1,
-  msg: "修改成功"
-}
-
-## 删除一个工人的出勤信息
-
-url: '/deleteWorker',
-method: 'get',
-params: data
-
-example:
-{
-  "userid":1,
-  "userName":"华雄",
-  "sex":"男",
-  "state":"在岗",
-  "clockInTime":"2020-06-01 08:00:01"
-}
-
-备注: 接受成功需要返回一个对象，要包含一个成功码、信息，比如:
-{
-  code: 1,
-  msg: "删除成功"
-}
-
-## 新增一个工人的出勤信息
 
 url: '/addWorker',
 method: 'get',
@@ -78,3 +57,4 @@ example:
   "state":"在岗",
   "lockInTime":"2021-04-28T13:11:42.937Z"
 }
+
