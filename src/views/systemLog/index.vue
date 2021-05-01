@@ -1,6 +1,14 @@
 <template>
   <div class="systemLog">
 
+    <div class="nav">
+      <div class="item">
+        <el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
+          导出Excel
+        </el-button>
+      </div>
+    </div>
+
     <div class="title">系统操作日志</div>
     
     <div class="radio">
@@ -16,6 +24,7 @@
       <el-timeline :reverse="reverse">
         <el-timeline-item
           v-for="(systemLog, index) in systemLogs"
+          placement="top"
           :key="index"
           :color="theme"
           :timestamp="systemLog.logTime">
@@ -28,7 +37,7 @@
                 <span :style="{'color':theme}">操作类型:</span> {{systemLog.logType}}
               </div>
               <div class="text item">
-                <span :style="{'color':theme}">操作者:</span> {{systemLog.opUser}}
+                <span :style="{'color':theme}">操作用户:</span> {{systemLog.opUser}}
               </div>
             </el-card>
         </el-timeline-item>
@@ -47,10 +56,12 @@
 </template>
 
 <script>
-
 import { reqSystemLog, deleteSystemLog } from '@/api/systemLog'
+import waves from '@/directive/waves' // waves directive
+import moment from 'moment';
 
 export default {
+  directives: { waves },
   data() {
     return {
       // 总页数
@@ -63,6 +74,9 @@ export default {
       
       // 存放日志的数组
       systemLogs: [],
+
+      // 导出Excel的属性
+      downloadLoading: false,
     }
   },
   methods: {
@@ -104,7 +118,30 @@ export default {
           message: '已取消删除'
         });          
       });      
-    }
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['操作ID', '操作内容', '操作类型', '操作用户', '操作时间']
+        const filterVal = ['logId', 'logContent', 'logType', 'opUser', 'logTime']
+        const data = this.formatJson(filterVal)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: "第" + this.page + "页系统操作日志-导出于" + moment().format('YYYY-MM-DD HH.mm.ss') })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal) {
+      return this.systemLogs.map(v => filterVal.map(j => {
+        if (j === 'lockInTime') {
+          // return parseTime(v[j])
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
+    },
   },
   computed: {
     theme() {
@@ -120,6 +157,18 @@ export default {
 <style lang="scss">
   .systemLog {
     margin: 20px 20px;
+
+    .nav {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      margin: 0 20px;
+      float: right;
+      .item {
+        margin: 0 20px;
+      }
+    }
 
     .title {
       margin: 30px 0;

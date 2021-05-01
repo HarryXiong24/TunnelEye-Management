@@ -15,9 +15,12 @@
               回到主页
             </el-dropdown-item>
           </router-link>
-          <el-dropdown-item divided @click.native.prevent.stop="guide">
+          <el-dropdown-item @click.native.prevent.stop="guide">
             <span style="display:block;">使用帮助</span>
           </el-dropdown-item>
+          <router-link to="/profile/index">
+            <el-dropdown-item>用户信息</el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
