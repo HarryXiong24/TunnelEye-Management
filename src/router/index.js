@@ -164,6 +164,19 @@ export const constantRoutes = [
   },
 
   {
+    path: '/systemLog',
+    component: Layout,
+    children: [
+      {
+        path: 'systemLog',
+        name: 'SystemLog',
+        component: () => import('@/views/systemLog/index'),
+        meta: { title: '系统日志管理', icon: 'documentation' }
+      }
+    ]
+  },
+
+  {
     path: '/frontendShow',
     component: Layout,
     children: [
