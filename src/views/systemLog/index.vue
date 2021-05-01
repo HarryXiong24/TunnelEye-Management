@@ -2,12 +2,21 @@
   <div class="systemLog">
 
     <div class="nav">
+
       <div class="item">
-        <el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
+        <el-button v-waves plain :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
           导出Excel
         </el-button>
       </div>
+
+      <div class="item">
+        <el-button plain :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownloadZip">
+          导出TXT文件
+        </el-button>
+      </div>
+
     </div>
+
 
     <div class="title">系统操作日志</div>
     
@@ -122,7 +131,7 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['操作ID', '操作内容', '操作类型', '操作用户', '操作时间']
         const filterVal = ['logId', 'logContent', 'logType', 'opUser', 'logTime']
-        const data = this.formatJson(filterVal)
+        const data = this.formatJson(filterVal, this.systemLogs)
         excel.export_json_to_excel({
           header: tHeader,
           data,
@@ -130,16 +139,21 @@ export default {
         this.downloadLoading = false
       })
     },
-    formatJson(filterVal) {
-      return this.systemLogs.map(v => filterVal.map(j => {
-        if (j === 'lockInTime') {
-          // return parseTime(v[j])
-          return v[j]
-        } else {
-          return v[j]
-        }
-      }))
+    handleDownloadZip() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Zip').then(zip => {
+        const tHeader = ['操作ID', '操作内容', '操作类型', '操作用户', '操作时间']
+        const filterVal = ['logId', 'logContent', 'logType', 'opUser', 'logTime']
+        const list = this.systemLogs
+        const data = this.formatJson(filterVal, list)
+        const filename = "第" + this.page + "页系统操作日志-导出于" + moment().format('YYYY-MM-DD HH.mm.ss')
+        zip.export_txt_to_zip(tHeader, data, filename, filename)
+        this.downloadLoading = false
+      })
     },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
+    }
   },
   computed: {
     theme() {

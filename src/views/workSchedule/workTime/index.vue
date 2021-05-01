@@ -28,16 +28,29 @@
 
  
       <div class="item">
-        <el-button type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
+        <el-button plain type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
       </div>
 
       <div class="item">
-        <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-          导出Excel
+        <el-button plain v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="centerDialogVisible = true">
+          导出信息
         </el-button>
-      </div>     
-
+      </div>    
+  
     </div>
+
+    <el-dialog
+      title="请选择导出的文件形式"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <el-button plain v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
+        导出Excel文件
+      </el-button>
+      <el-button plain :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownloadZip">
+        导出TXT文件
+      </el-button>
+    </el-dialog>
 
     <div class="table">
 
@@ -105,6 +118,7 @@ export default {
       // 导出Excel的属性
       downloadLoading: false,
       excelTitle: '',
+      centerDialogVisible: false,
     }
   },
   methods: {
@@ -147,7 +161,7 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['工号', '姓名', '性别', '是否在岗', '到岗时间']
         const filterVal = ['userid', 'userName', 'sex', 'state', 'clockInTime']
-        const data = this.formatJson(filterVal)
+        const data = this.formatJson(filterVal, this.tableData)
         console.table(this.tableData)
         excel.export_json_to_excel({
           header: tHeader,
@@ -155,12 +169,24 @@ export default {
           filename: this.excelTitle + moment(this.date).format('YYYY-MM-DD HH.mm.ss') + "的出勤信息" })
         this.downloadLoading = false
       })
+      this.centerDialogVisible = false
     },
-    formatJson(filterVal) {
-      return this.tableData.map(v => filterVal.map(j => {
-        return v[j]
-      }))
+    handleDownloadZip() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Zip').then(zip => {
+        const tHeader = ['工号', '姓名', '性别', '是否在岗', '到岗时间']
+        const filterVal = ['userid', 'userName', 'sex', 'state', 'clockInTime']
+        const list = this.tableData
+        const data = this.formatJson(filterVal, list)
+        const filename = this.excelTitle + moment(this.date).format('YYYY-MM-DD HH.mm.ss') + "的出勤信息"
+        zip.export_txt_to_zip(tHeader, data, filename, filename)
+        this.downloadLoading = false
+      })
+      this.centerDialogVisible = false
     },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
+    }
   },
   mounted() {
     this.init()
@@ -182,9 +208,9 @@ export default {
     .nav {
       display: flex;
       flex-direction: row;
-      justify-content: flex-start;
+      justify-content: flex-end;
       align-items: center;
-      margin: 0 20px;
+      margin: 0 40px;
       .item {
         margin: 0 20px;
       }

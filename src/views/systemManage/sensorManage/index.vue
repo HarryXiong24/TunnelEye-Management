@@ -4,20 +4,33 @@
     <div class="nav">
       
       <div class="item">
-        <el-button type="primary" @click="addNew" icon="el-icon-plus">新增传感器信息</el-button>
+        <el-button plain type="primary" @click="addNew" icon="el-icon-plus">新增传感器信息</el-button>
       </div>
       
       <div class="item">
-        <el-button type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
+        <el-button plain type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
       </div>
 
       <div class="item">
-        <el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
-          导出Excel
+        <el-button plain v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="centerDialogVisible = true">
+          导出信息
         </el-button>
       </div>
 
     </div>
+
+    <el-dialog
+      title="请选择导出的文件形式"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <el-button plain v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
+        导出Excel文件
+      </el-button>
+      <el-button plain :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownloadZip">
+        导出TXT文件
+      </el-button>
+    </el-dialog>    
 
     <div class="title">所有传感器信息</div>
 
@@ -244,6 +257,7 @@ export default {
       // 表格的属性, 因为传感器类型需要翻译一下
       tableShowData: [],
       search: '',
+      centerDialogVisible: false,
       
       // 导出Excel的属性
       downloadLoading: false,
@@ -483,19 +497,31 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['传感器ID', '传感器名称', '传感器类型', '传感器地址码', 'node节点ID', '标签安装地址', '标签安装时间']
         const filterVal = ['sensorId', 'sensorNo', 'sensorType', 'sensorAdd', 'nodeId', 'setUpAddk', 'importTime']
-        const data = this.formatJson(filterVal)
+        const data = this.formatJson(filterVal, this.tableData)
         excel.export_json_to_excel({
           header: tHeader,
           data,
           filename: "第" + this.page + "页传感器信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss') })
         this.downloadLoading = false
       })
+      this.centerDialogVisible = false
     },
-    formatJson(filterVal) {
-      return this.tableData.map(v => filterVal.map(j => {
-          return v[j]
-      }))
+    handleDownloadZip() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Zip').then(zip => {
+        const tHeader = ['传感器ID', '传感器名称', '传感器类型', '传感器地址码', 'node节点ID', '标签安装地址', '标签安装时间']
+        const filterVal = ['sensorId', 'sensorNo', 'sensorType', 'sensorAdd', 'nodeId', 'setUpAddk', 'importTime']
+        const list = this.tableData
+        const data = this.formatJson(filterVal, list)
+        const filename = "第" + this.page + "页传感器信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss')
+        zip.export_txt_to_zip(tHeader, data, filename, filename)
+        this.downloadLoading = false
+      })
+      this.centerDialogVisible = false
     },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
+    }
   },
   async mounted() {
     await this.getDevInfo(1)

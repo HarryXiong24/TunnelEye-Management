@@ -4,20 +4,33 @@
     <div class="nav">
       
       <div class="item">
-        <el-button type="primary" @click="addNew" icon="el-icon-plus">新增配置</el-button>
+        <el-button plain type="primary" @click="addNew" icon="el-icon-plus">新增配置</el-button>
       </div>
       
       <div class="item">
-        <el-button type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
+        <el-button plain type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
       </div>
 
       <div class="item">
-        <el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
-          导出Excel
+        <el-button plain v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="centerDialogVisible = true">
+          导出信息
         </el-button>
       </div>
 
     </div>
+
+    <el-dialog
+      title="请选择导出的文件形式"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <el-button plain v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
+        导出Excel文件
+      </el-button>
+      <el-button plain :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownloadZip">
+        导出TXT文件
+      </el-button>
+    </el-dialog>
 
     <div class="title">所有下位机配置信息</div>
 
@@ -245,6 +258,8 @@ export default {
       downloadLoading: false,
       excelTitle: '',
 
+      centerDialogVisible: false,
+
       // 编辑表单
       dialogFormVisible: false,
       ruleForm: {
@@ -455,19 +470,31 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['配置ID', '节点ID', '串口号', '波特率', '检验位', '数据位', '停止位', '备注']
         const filterVal = ['configId', 'nodeId', 'serialNum', 'baud', 'checkBit', 'dataBit', 'stopBit', 'remark']
-        const data = this.formatJson(filterVal)
+        const data = this.formatJson(filterVal, this.tableData)
         excel.export_json_to_excel({
           header: tHeader,
           data,
           filename: "第" + this.page + "页下位机配置信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss') })
         this.downloadLoading = false
       })
+      this.centerDialogVisible = false
     },
-    formatJson(filterVal) {
-      return this.tableData.map(v => filterVal.map(j => {
-        return v[j]
-      }))
+    handleDownloadZip() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Zip').then(zip => {
+        const tHeader = ['配置ID', '节点ID', '串口号', '波特率', '检验位', '数据位', '停止位', '备注']
+        const filterVal = ['configId', 'nodeId', 'serialNum', 'baud', 'checkBit', 'dataBit', 'stopBit', 'remark']
+        const list = this.tableData
+        const data = this.formatJson(filterVal, list)
+        const filename = "第" + this.page + "页下位机配置信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss')
+        zip.export_txt_to_zip(tHeader, data, filename, filename)
+        this.downloadLoading = false
+      })
+      this.centerDialogVisible = false
     },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
+    }
   },
   async mounted() {
     await this.getDevInfo(1)
