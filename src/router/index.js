@@ -146,6 +146,12 @@ export const constantRoutes = [
         name: 'ManageWork',
         component: () => import('@/views/workSchedule/manageWork/index'),
         meta: { title: '值班排班管理', icon: 'skill' }
+      },
+      {
+        path: 'workTime',
+        name: 'WorkTime',
+        component: () => import('@/views/workSchedule/workTime/index'),
+        meta: { title: '出勤信息查看', icon: 'eye' }
       }
     ]
   },
