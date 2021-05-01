@@ -2,7 +2,7 @@
   <div class="profile">
     <el-card style="margin-bottom:20px;">
       <div slot="header" class="clearfix">
-        <span>用户信息</span>
+        <span :style="{'color':theme}">用户信息</span>
       </div>
 
       <div class="user-profile">
@@ -16,7 +16,7 @@
 
       <div class="user-bio">
         <div class="user-education user-bio-section">
-          <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>部门信息</span></div>
+          <div class="user-bio-section-header"><i class="el-icon-s-grid" :style="{'color':theme}"></i><span :style="{'color':theme}">部门信息</span></div>
           <div class="user-bio-section-body">
             <div class="text-muted">
               用户ID: {{userInfo.userid}}
@@ -31,7 +31,7 @@
         </div>
 
         <div class="user-skills user-bio-section">
-          <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>个人信息</span></div>
+          <div class="user-bio-section-header"><i class="el-icon-s-custom" :style="{'color':theme}"></i><span :style="{'color':theme}">个人信息</span></div>
           <div class="user-bio-section-body">
             <div class="progress-item">
               身份信息: <span>{{userInfo.idCard}}</span>
@@ -65,6 +65,11 @@ export default {
       this.userInfo.sex = '男'
     } else {
       this.userInfo.sex = '女'
+    }
+  },
+  computed: {
+    theme() {
+      return this.$store.state.settings.theme
     }
   },
 }

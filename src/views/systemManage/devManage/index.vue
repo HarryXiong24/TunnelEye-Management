@@ -213,7 +213,6 @@
 import { reqDev, addDev, deleteDev, reviewDev } from '@/api/devManage'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 
 export default {
     directives: { waves },
@@ -421,12 +420,7 @@ export default {
     },
     formatJson(filterVal) {
       return this.tableData.map(v => filterVal.map(j => {
-        if (j === 'lockInTime') {
-          // return parseTime(v[j])
-          return v[j]
-        } else {
-          return v[j]
-        }
+        return v[j]
       }))
     },
   },

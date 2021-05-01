@@ -195,7 +195,6 @@
 import { reqUWBTagManage, addUWBTagManage, deleteUWBTagManage, reviewUWBTagManage } from '@/api/UWBTagManage'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
-// import { parseTime } from '@/utils'
 
 export default {
   directives: { waves },
@@ -255,7 +254,7 @@ export default {
         sysId: null,
         labelNo: '',
         labelAdd: null,
-        importTime: '',
+        importTime: new Date(),
         remark: '',
       },
       addRules: {
@@ -404,12 +403,7 @@ export default {
     },
     formatJson(filterVal) {
       return this.tableData.map(v => filterVal.map(j => {
-        if (j === 'lockInTime') {
-          // return parseTime(v[j])
           return v[j]
-        } else {
-          return v[j]
-        }
       }))
     },
   },

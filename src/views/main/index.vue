@@ -8,6 +8,7 @@
     <div class="chart-container">
       <chart height="100%" width="100%" />
     </div>
+
   </div>
 
 </template>
@@ -34,7 +35,7 @@ export default {
   height: 100%;
 
   .welcome {
-    margin: 20px;
+    margin: 26px 20px 10px 20px;
     font-size: 24px;
     color: #5f6464;
   }
@@ -44,11 +45,10 @@ export default {
     font-size: 30px;
     color: #5f6464;
     line-height: 54px;
-    margin: 30px auto 0;
+    margin: 20px auto 0;
   }
 
   .chart-container{
-    position: relative;
     width: 100%;
     height: calc(100vh - 200px);
   }

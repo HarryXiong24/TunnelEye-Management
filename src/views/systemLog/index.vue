@@ -12,10 +12,10 @@
     <div class="title">系统操作日志</div>
     
     <div class="radio">
-      查看的顺序
+      查看的时间顺序
       <el-radio-group v-model="reverse" class="select">
-        <el-radio :label="true">倒序</el-radio>
-        <el-radio :label="false">正序</el-radio>
+        <el-radio :label="false">倒序</el-radio>
+        <el-radio :label="true">正序</el-radio>
       </el-radio-group>
     </div>
 
@@ -70,7 +70,7 @@ export default {
       page: 0,
 
       // 排序
-      reverse: true,
+      reverse: false,
       
       // 存放日志的数组
       systemLogs: [],
@@ -88,8 +88,6 @@ export default {
       }
       let respone = await reqSystemLog(data)
       let result = respone.data
-
-      console.log(result);
 
       this.count = result.count
       this.page = page
