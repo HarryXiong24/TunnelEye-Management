@@ -5,7 +5,7 @@
     
     <el-card shadow="always" class="card">
       <div slot="header" class="clearfix">
-          <span class="title">说明</span>
+          <span class="title" :style="{'color':theme}">说明</span>
       </div>
       <div class="item">
           1. 本系统还配有手机APP, 移动端网页APP用来显示实时定位和气体监测等数据 
@@ -18,7 +18,7 @@
       </div>
       <div class="item">
           4. 若想访问移动端网页APP, 请用手机浏览器访问: 
-          <el-link @click="goTo" type="warning" herf="http://tunneleye.coyote416.cn">隧道之眼(http://tunneleye.coyote416.cn)</el-link>
+          <el-link @click="goTo" :style="{'color':theme}" herf="http://tunneleye.coyote416.cn">隧道之眼(http://tunneleye.coyote416.cn)</el-link>
       </div>
     </el-card>
     
@@ -36,7 +36,12 @@ export default {
     goTo() {
       window.location.href = "http://tunneleye.coyote416.cn"
     }
-  }
+  },
+  computed: {
+    theme() {
+      return this.$store.state.settings.theme
+    }
+  },
 }
 </script>
 

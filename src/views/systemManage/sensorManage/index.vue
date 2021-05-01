@@ -28,7 +28,7 @@
         style="width: 100%">
         <el-table-column
           sortable
-          min-width="60"
+          min-width="70"
           label="传感器ID"
           prop="sensorId">
         </el-table-column>
@@ -38,34 +38,35 @@
           prop="sensorNo">
         </el-table-column>
         <el-table-column
-          min-width="60"
+          min-width="70"
           label="传感器类型"
           prop="sensorType">
         </el-table-column>
         <el-table-column
           sortable
-          min-width="80"
+          min-width="100"
           label="传感器地址码"
           prop="sensorAdd">
         </el-table-column>
         <el-table-column
           sortable
-          min-width="80"
+          min-width="70"
           label="节点ID"
           prop="nodeId">
         </el-table-column>
         <el-table-column
+          min-width="110"
           label="安装位置"
           prop="setUpAdd">
         </el-table-column>
         <el-table-column
-          min-width="120"
+          min-width="110"
           label="安装时间"
           prop="importTime">
         </el-table-column>
 
         <el-table-column
-          min-width="140"
+          min-width="110"
           align="right">
           <template slot="header" slot-scope="scope">
             <el-input
