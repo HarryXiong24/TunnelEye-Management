@@ -497,7 +497,7 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['传感器ID', '传感器名称', '传感器类型', '传感器地址码', 'node节点ID', '标签安装地址', '标签安装时间']
         const filterVal = ['sensorId', 'sensorNo', 'sensorType', 'sensorAdd', 'nodeId', 'setUpAddk', 'importTime']
-        const data = this.formatJson(filterVal, this.tableData)
+        const data = this.formatJson(filterVal, this.tableShowData)
         excel.export_json_to_excel({
           header: tHeader,
           data,
@@ -511,7 +511,7 @@ export default {
       import('@/vendor/Export2Zip').then(zip => {
         const tHeader = ['传感器ID', '传感器名称', '传感器类型', '传感器地址码', 'node节点ID', '标签安装地址', '标签安装时间']
         const filterVal = ['sensorId', 'sensorNo', 'sensorType', 'sensorAdd', 'nodeId', 'setUpAddk', 'importTime']
-        const list = this.tableData
+        const list = this.tableShowData
         const data = this.formatJson(filterVal, list)
         const filename = "第" + this.page + "页传感器信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss')
         zip.export_txt_to_zip(tHeader, data, filename, filename)
