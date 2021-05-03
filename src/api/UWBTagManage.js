@@ -26,7 +26,7 @@ export function deleteUWBTagManage(params, data) {
 
 export function reviewUWBTagManage(params, data) {
   return request({
-    url: `label/${params}`,
+    url: `/label/${params}`,
     method: 'put',
     data: data
   })

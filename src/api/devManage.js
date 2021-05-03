@@ -26,7 +26,7 @@ export function deleteDev(params, data) {
 
 export function reviewDev(params, data) {
   return request({
-    url: `node/${params}`,
+    url: `/node/${params}`,
     method: 'put',
     data: data
   })

@@ -12,6 +12,10 @@
       <el-form-item label="发布者" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
+
+      <el-form-item label="发布者" prop="name">
+        <el-input v-model="form.infoSource"></el-input>
+      </el-form-item>
    
       <el-form-item label="发布时间" prop="date">
         <el-col :span="11">
@@ -24,7 +28,7 @@
         </el-col>
       </el-form-item>
 
-      <el-form-item label="严重等级" prop="rank">
+      <el-form-item label="预警等级" prop="rank">
         <el-radio-group v-model="form.rank">
           <el-radio label="一般"></el-radio>
           <el-radio label="警告"></el-radio>
@@ -34,6 +38,10 @@
 
       <el-form-item label="消息正文" prop="content">
         <el-input type="textarea" v-model="form.content"></el-input>
+      </el-form-item>
+
+      <el-form-item label="信息类型" prop="name">
+        <el-input v-model="form.infoType"></el-input>
       </el-form-item>
 
       <el-form-item label="备注" prop="plus">
@@ -47,56 +55,13 @@
       </el-form-item>
 
     </el-form>
-<!-- 
-    <el-form ref="form" :rules="rules" :model="form" label-width="80px">
 
-      <el-form-item label="消息标题">
-        <el-input v-model="form.title"></el-input>
-      </el-form-item>
-
-      <el-form-item label="发布者">
-        <el-input v-model="form.name"></el-input>
-      </el-form-item>
-   
-      <el-form-item label="发布时间">
-        <el-col :span="11">
-          <el-date-picker
-            v-model="form.date"
-            type="datetime"
-            placeholder="选择日期时间"
-            default-time="12:00:00">
-          </el-date-picker>
-        </el-col>
-
-      </el-form-item>
-
-      <el-form-item label="严重等级">
-        <el-radio-group v-model="form.rank">
-          <el-radio label="一般"></el-radio>
-          <el-radio label="警告"></el-radio>
-          <el-radio label="严重"></el-radio>
-        </el-radio-group>
-      </el-form-item>
-
-      <el-form-item label="消息正文">
-        <el-input type="textarea" v-model="form.content"></el-input>
-      </el-form-item>
-
-      <el-form-item label="备注">
-        <el-input v-model="form.plus"></el-input>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button @click="clear">清空</el-button>
-      </el-form-item>
-
-    </el-form> -->
   </div>
 </template>
 
 <script>
   import { submitNews } from '@/api/submitNews'
+  import moment from 'moment'
 
   export default {
     data() {
@@ -104,10 +69,12 @@
         form: {
           title: '',
           name: '',
-          date: '',
+          date: new Date(),
           rank: '',
           content: '',
           plus: '',
+          infoSource: '',
+          infoType: '天气预警',
         },
         rules: {
           title: [
@@ -126,6 +93,12 @@
           content: [
             { required: true, message: '请填写消息正文', trigger: 'blur' }
           ],
+          infoSource: [
+            { required: true, message: '请填写消息正文', trigger: 'blur' }
+          ],
+          infoType: [
+            { required: true, message: '请填写消息正文', trigger: 'blur' }
+          ],
         }
       }
     },
@@ -133,10 +106,19 @@
       onSubmit(formName) {
         this.$refs[formName].validate( async (valid) => {
           if (valid) {
-            // 未写完
-            console.log(JSON.stringify(this.form))
-            // let respone = await submitNews(this.form) 
-            this.$alert('新消息发布成功!', '提示', {
+            let data = {
+              title: this.form.title,
+              name: this.form.name,
+              date: moment(this.form.date).format('YYYY-MM-DD HH:mm:ss'),
+              rank: this.form.rank,
+              content: this.form.content,
+              plus: this.form.plue,
+              infoSource: this.form.infoSource,
+              infoType: this.form.infoType
+            }
+            let respone = await submitNews(data)
+            let result = respone.data
+            this.$alert(result.msg, '提示', {
               confirmButtonText: '确定',
               callback: (action) => {
                 this.$refs[formName].resetFields();

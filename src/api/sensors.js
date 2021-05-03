@@ -26,7 +26,7 @@ export function deleteSensor(params, data) {
 
 export function reviewSensor(params, data) {
   return request({
-    url: `sensor/${params}`,
+    url: `/sensor/${params}`,
     method: 'put',
     data: data
   })

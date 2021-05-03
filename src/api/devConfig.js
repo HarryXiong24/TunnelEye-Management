@@ -26,7 +26,7 @@ export function deleteDevConfig(params, data) {
 
 export function reviewDevConfig(params, data) {
   return request({
-    url: `nodeconf/${params}`,
+    url: `/nodeconf/${params}`,
     method: 'put',
     data: data
   })

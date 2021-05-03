@@ -26,7 +26,7 @@ export function deleteUWBInfo(params, data) {
 
 export function reviewUWBInfo(params, data) {
   return request({
-    url: `uwbsys/${params}`,
+    url: `/uwbsys/${params}`,
     method: 'put',
     data: data
   })

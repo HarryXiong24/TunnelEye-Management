@@ -157,15 +157,24 @@ export const constantRoutes = [
   },
 
   {
-    path: '/submitNews',
+    path: '/newsManage',
     component: Layout,
+    redirect: '/newsManage/showNews',
+    name: 'NewsManage',
+    meta: { title: '预警消息管理', icon: 'icon' },
     children: [
       {
-        path: 'index',
+        path: 'showNews',
+        name: 'ShowNews',
+        component: () => import('@/views/newsManage/showNews/index'),
+        meta: { title: '消息展示', icon: 'message' }
+      },
+      {
+        path: 'submitNews',
         name: 'SubmitNews',
-        component: () => import('@/views/submitNews/index'),
+        component: () => import('@/views/newsManage/submitNews/index'),
         meta: { title: '发布新消息', icon: 'form' }
-      }
+      },
     ]
   },
 

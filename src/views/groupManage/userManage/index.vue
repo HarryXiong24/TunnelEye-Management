@@ -371,12 +371,6 @@ export default {
         sex: [
           { required: true, message: '请选择用户类型', trigger: 'blur' }
         ],
-        mobile: [
-          { validator: validateNumber, trigger: 'blur'},
-        ],
-        idCard: [
-          { validator: validateNumber, trigger: 'blur'},
-        ],
       },
 
       // 新增信息的属性
@@ -412,12 +406,6 @@ export default {
         ],
         sex: [
           { required: true, message: '请选择用户类型', trigger: 'blur' }
-        ],
-        mobile: [
-          { validator: validateNumber, trigger: 'blur'},
-        ],
-        idCard: [
-          { validator: validateNumber, trigger: 'blur'},
         ],
       }
     }
