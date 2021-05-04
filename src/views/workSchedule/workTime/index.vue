@@ -107,7 +107,7 @@ export default {
       options: [],
       value: '', // 选项的值
       label: '', // 选项的内容
-      date: new Date('2020-06-01'),
+      date: new Date(),
 
       tableData: [],
       search: '',

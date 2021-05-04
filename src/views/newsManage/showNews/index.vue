@@ -160,9 +160,7 @@ export default {
       }
       let respone = await reqNews(data)
       let result = respone.data
-
-      console.log(result)
-
+      
       this.count = result.count
       this.page = page
       this.tableData = result.data

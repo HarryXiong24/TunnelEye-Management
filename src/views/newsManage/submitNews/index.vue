@@ -13,7 +13,7 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
 
-      <el-form-item label="发布者" prop="name">
+      <el-form-item label="消息来源" prop="name">
         <el-input v-model="form.infoSource"></el-input>
       </el-form-item>
    
@@ -94,10 +94,10 @@
             { required: true, message: '请填写消息正文', trigger: 'blur' }
           ],
           infoSource: [
-            { required: true, message: '请填写消息正文', trigger: 'blur' }
+            { required: true, message: '请填写消息来源', trigger: 'blur' }
           ],
           infoType: [
-            { required: true, message: '请填写消息正文', trigger: 'blur' }
+            { required: true, message: '请填写消息类型', trigger: 'blur' }
           ],
         }
       }
@@ -112,10 +112,11 @@
               date: moment(this.form.date).format('YYYY-MM-DD HH:mm:ss'),
               rank: this.form.rank,
               content: this.form.content,
-              plus: this.form.plue,
+              plus: this.form.plus,
               infoSource: this.form.infoSource,
               infoType: this.form.infoType
             }
+            console.log(data)
             let respone = await submitNews(data)
             let result = respone.data
             this.$alert(result.msg, '提示', {

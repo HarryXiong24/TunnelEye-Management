@@ -7,6 +7,10 @@
         <el-button plain type="primary" @click="addNew" icon="el-icon-plus">新增部门信息</el-button>
       </div>
 
+      <div class="item">
+        <el-button plain type="primary" @click="refresh" icon="el-icon-refresh-right">刷新信息</el-button>
+      </div>
+
     </div>
 
     <div class="title">部门层级信息</div>
@@ -238,7 +242,6 @@ export default {
       this.nowData = data
     },
     showData(data) {
-      console.log(data);
       this.nowData = data
       this.visible = true
     },

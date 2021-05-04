@@ -1,10 +1,10 @@
 <template>
-  <div class="manageGroup">
+  <div class="showGroupMember">
  
     <div class="nav">
       
       <div class="item">
-        <el-button plain type="primary" @click="addNew" icon="el-icon-plus">新增班组信息</el-button>
+        <el-button plain type="primary" @click="addNew" icon="el-icon-plus">新增成员</el-button>
       </div>
       
       <div class="item">
@@ -23,7 +23,8 @@
       title="请选择导出的文件形式"
       :visible.sync="centerDialogVisible"
       width="30%"
-      center>
+      center
+      append-to-body>
       <el-button plain v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
         导出Excel文件
       </el-button>
@@ -32,25 +33,29 @@
       </el-button>
     </el-dialog>
 
-    <div class="title">所有班组信息</div>
-
     <div class="table">
 
       <el-table
-        :data="tableData.filter(data => !search || String(data.groupId).includes(search))"
+        :data="tableData.filter(data => !search || String(data.userName).includes(search))"
         style="width: 100%">
         <el-table-column
           sortable
-          min-width="120"
-          label="班组ID"
-          prop="groupId">
+          min-width="60"
+          label="成员ID"
+          prop="userid">
         </el-table-column>
         <el-table-column
-          min-width="120"
-          label="班组名称"
-          prop="groupName">
+          min-width="60"
+          label="成员姓名"
+          prop="userName">
         </el-table-column>
-      
+
+        <el-table-column
+          min-width="60"
+          label="绑定的标签ID"
+          prop="labelId">
+        </el-table-column>
+
         <el-table-column
           min-width="120"
           align="right">
@@ -58,17 +63,13 @@
             <el-input
               v-model="search"
               size="mini"
-              placeholder="输入班组ID搜索"/>
+              placeholder="输入成员姓名搜索"/>
           </template>
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="success"
-              @click="handleEdit(scope.$index, scope.row)">编辑班组信息</el-button>
-            <el-button
-              size="mini"
-              type="warning"
-              @click="handleShow(scope.$index, scope.row)">查看该班组成员</el-button>
+              @click="handleEdit(scope.$index, scope.row)">给用户绑定标签</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -82,16 +83,20 @@
 
     <div class="workEditor">
 
-      <el-dialog title="信息修改" :visible.sync="dialogFormVisible" center>
+      <el-dialog append-to-body title="信息修改" :visible.sync="dialogFormVisible" center>
 
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form label-position="top" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           
-          <el-form-item label="班组ID" prop="groupId">
-            <el-input v-model.number="ruleForm.groupId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
+          <el-form-item label="成员ID" prop="userid">
+            <el-input v-model.number="ruleForm.userid" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
           </el-form-item> 
 
-          <el-form-item label="班组名称" prop="groupName">
-            <el-input v-model="ruleForm.groupName"></el-input>
+          <el-form-item label="成员姓名" prop="userName">
+            <el-input v-model="ruleForm.userName" :disabled="true" placeholder="禁止修改"></el-input>
+          </el-form-item>
+
+          <el-form-item label="绑定的标签ID" prop="labelId">
+            <el-input v-model.number="ruleForm.labelId"></el-input>
           </el-form-item>
 
         </el-form>
@@ -106,16 +111,16 @@
 
      <div class="addEditor">
 
-      <el-dialog title="新增班组信息" :visible.sync="addFormVisible" center>
+      <el-dialog append-to-body title="新增成员" :visible.sync="addFormVisible" center>
 
-        <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="100px" class="demo-ruleForm">
+        <el-form label-position="top" :model="addForm" :rules="addRules" ref="addForm" label-width="100px" class="demo-ruleForm">
           
-          <el-form-item label="班组ID" prop="groupId">
-            <el-input v-model.number="addForm.groupId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
+          <el-form-item label="成员ID" prop="userid">
+            <el-input v-model.number="addForm.userid"></el-input>
           </el-form-item> 
 
-          <el-form-item label="班组名称" prop="groupName">
-            <el-input v-model="addForm.groupName"></el-input>
+          <el-form-item label="成员所在班组ID" prop="groupId">
+            <el-input v-model.number="addForm.groupId"></el-input>
           </el-form-item>
 
         </el-form>
@@ -129,49 +134,29 @@
       </el-dialog>
     </div>
 
-    <div class="block">
-      <el-pagination
-        layout="prev, pager, next"
-        :total="count"
-        :page-size="10"
-        @current-change="handleCurrentChange">
-      </el-pagination>
-    </div>
-
-    <el-dialog :before-close="handleClose" :title="showTableTitle" :visible.sync="dialogTableVisible" width="80%">
-      <ShowGroupMember :users="users" :groupId="groupId" :groupName="groupName" :page="this.page"></ShowGroupMember>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
-import { reqGroup, addGroup, deleteGroup, reviewGroup } from '@/api/manageGroup'
+import { reqGroup, addWorker, deleteWorker, bindLabel } from '@/api/manageGroup'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
-import ShowGroupMember from '@/components/ShowGroupMember/index'
 
 export default {
   directives: { waves },
-  components: {
-    ShowGroupMember
+  props: {
+    users: Array,
+    groupId: Number,
+    page: Number,
+    groupName: String,
   },
   data() {
-    let validateNumber = (rule, value, callback) => {
-      if (typeof value === 'string' && value !== '') {
-        callback(new Error('该项必须为数字'));
-      } else {
-        callback();
-      }
-    }
     return {
-      // 总页数
-      count: 0,
-      // 记录当前页码数
-      page: 0,
+      name: this.groupName,
 
       // 表格的属性
-      tableData: [], // 存放返回的数据
+      previousData: [],
+      tableData: this.users, // 存放返回的数据
       search: '',
       
       // 导出Excel的属性
@@ -184,37 +169,42 @@ export default {
       // 编辑表单
       dialogFormVisible: false,
       ruleForm: {
-        groupId: null,
-        groupName: '',
-        groupState: null,
-        users: null,
+        userid: null,
+        userName: '',
+        labelId: null,
+        labelAdd: null,
       },
       rules: {
-        groupName: [
+        userName: [
           { required: true, message: '请输入班组名称', trigger: 'blur' },
         ],
+        labelId: [
+          { required: true, message: '请输入标签ID', trigger: 'blur' },
+          { type: 'number', message: '标签ID必须为数字', trigger: 'blur'}
+        ]
       },
 
       // 新增信息的属性
       showTableTitle: '',
       addFormVisible: false,
       addForm: {
+        userid: null,
+        userName: '',
+        labelAdd: null,
+        labelId: null,
         groupId: null,
-        groupName: '',
-        groupState: null,
-        users: null,
       },
       addRules: {
-        groupName: [
-          { required: true, message: '请输入班组名称', trigger: 'blur' },
+        groupId: [
+          { required: true, message: '请输入用户所在的班组', trigger: 'blur' },
+          { type: 'number', message: '用户所在的班组必须为数字', trigger: 'blur'}
+        ],
+        userid: [
+          { required: true, message: '请输入用户ID', trigger: 'blur' },
+          { type: 'number', message: '用户ID必须为数字', trigger: 'blur'}
         ],
       },
 
-      // 查看班组成员表格的属性
-      dialogTableVisible: false,
-      users: [],
-      groupId: null,
-      groupName: '',
     }
   },
   methods: {
@@ -227,32 +217,22 @@ export default {
       let respone = await reqGroup(data)
       let result = respone.data
 
-      this.count = result.count
       this.page = page
-      this.tableData = result.data
-    },
-    // 处理分页请求, 同时更新数据
-    handleCurrentChange(val) {
-      this.getDevInfo(val)
+      this.previousData = result.data
+
+      this.previousData.forEach(value => {
+        if(value.groupId === this.groupId) {
+          this.tableData = value.users
+        }
+      })
     },
     handleEdit(index, row) {
-      this.ruleForm.groupId = row.groupId
-      this.ruleForm.groupName = row.groupName     
-      this.ruleForm.groupState = row.groupState
-      this.ruleForm.users = row.users
+      this.ruleForm.userid = row.userid
+      this.ruleForm.userName = row.userName     
+      this.ruleForm.labelId = row.labelId
+      this.ruleForm.labelAdd = row.labelAdd
 
       this.dialogFormVisible = true;
-    },
-    handleShow(index, row) {
-      this.users = row.users
-      this.groupId = row.groupId
-      this.groupName = row.groupName
-      this.showTableTitle = row.groupName + '成员信息'
-      this.dialogTableVisible = true
-    },
-    handleClose(done) {
-      this.getDevInfo(this.page)
-      done()
     },
     handleDelete(index, row) {
       this.$confirm('此操作将删除该成员, 是否继续?', '提示', {
@@ -260,7 +240,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then( async () => {
-        let response = await deleteGroup(row.groupId)
+        let data = {
+          groupId: this.groupId,
+          userId: row.userid
+        }
+        console.log(data);
+        let response = await deleteWorker(data)
         let msg = response.data.msg
        
         this.$message({
@@ -281,9 +266,11 @@ export default {
         if (valid) {
           // 有问题待讨论解决
           let data = {
-            groupName: this.ruleForm.groupName,
+            userId: this.ruleForm.userid,
+            labelId: this.ruleForm.labelId
           }
-          let response = await reviewGroup(this.ruleForm.groupId, data)
+          console.log(data)
+          let response = await bindLabel(data)
           let msg = response.data.msg
           this.$message({
             type: 'success',
@@ -307,9 +294,10 @@ export default {
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
           let data = {
-            groupName: this.addForm.groupName,
+            userId: this.addForm.userid,
+            groupId: this.groupId,
           }
-          let response = await addGroup(data)
+          let response = await addWorker(data)
           let msg = response.data.msg
           this.$message({
             type: 'success',
@@ -333,13 +321,13 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['班组ID', '班组名称']
-        const filterVal = ['groupId', 'groupName']
+        const tHeader = ['用户ID', '用户姓名', '绑定标签']
+        const filterVal = ['userid', 'userName', 'labelId']
         const data = this.formatJson(filterVal, this.tableData)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: "第" + this.page + "页班组信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss') })
+          filename: this.name + "成员信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss') })
         this.downloadLoading = false
       })
       this.centerDialogVisible = false
@@ -347,11 +335,11 @@ export default {
     handleDownloadZip() {
       this.downloadLoading = true
       import('@/vendor/Export2Zip').then(zip => {
-        const tHeader = ['班组ID', '班组名称']
-        const filterVal = ['groupId', 'groupName']
+        const tHeader = ['用户ID', '用户姓名', '绑定标签']
+        const filterVal = ['userid', 'userName', 'labelId']
         const list = this.tableData
         const data = this.formatJson(filterVal, list)
-        const filename = "第" + this.page + "页班组信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss')
+        const filename = this.name + "成员信息-导出于" + moment().format('YYYY-MM-DD HH.mm.ss')
         zip.export_txt_to_zip(tHeader, data, filename, filename)
         this.downloadLoading = false
       })
@@ -361,14 +349,11 @@ export default {
       return jsonData.map(v => filterVal.map(j => v[j]))
     }
   },
-  async mounted() {
-    await this.getDevInfo(1)
-  },
 }
 </script>
 
 <style lang="scss">
-  .manageGroup {
+  .showGroupMember {
     width: 100%;
     height: 100%;
     margin: 20px;

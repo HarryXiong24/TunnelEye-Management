@@ -364,7 +364,6 @@ export default {
     submitAddForm(formName) {
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
-          // 有问题待讨论解决
           let data = {
             groupId: this.addForm.groupId,
             startTime: moment(this.addForm.startTime).format('YYYY-MM-DD HH:mm:ss'),
@@ -425,11 +424,11 @@ export default {
   },
   async mounted() {
     await this.getDevInfo(1)
-    await this.getDevInfo(1)
-    let localLocale = moment('2021.5.1');
-    localLocale.locale('zh-cn')
-    let result = localLocale.format('dddd')
-    console.log(result);
+
+    // let localLocale = moment('2021.5.1');
+    // localLocale.locale('zh-cn')
+    // let result = localLocale.format('dddd')
+    // console.log(result);
   },
 }
 </script>
