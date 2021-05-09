@@ -122,8 +122,15 @@
             <el-input v-model="ruleForm.configId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
           </el-form-item>
 
-          <el-form-item label="node节点ID" prop="nodeId">
-            <el-input v-model.number="ruleForm.nodeId"></el-input>
+          <el-form-item label="node节点" prop="nodeId">
+            <el-select v-model="ruleForm.nodeId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="串口号" prop="serialNum">
@@ -174,8 +181,15 @@
             <el-input v-model="addForm.configId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
           </el-form-item>
 
-          <el-form-item label="node节点ID" prop="nodeId">
-            <el-input v-model.number="addForm.nodeId"></el-input>
+          <el-form-item label="node节点" prop="nodeId">
+            <el-select v-model="addForm.nodeId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="串口号" prop="serialNum">
@@ -231,6 +245,7 @@
 
 <script>
 import { reqDevConfig, addDevConfig, deleteDevConfig, reviewDevConfig } from '@/api/devConfig'
+import { reqNodeId } from '@/api/getNodeId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 
@@ -259,6 +274,9 @@ export default {
       excelTitle: '',
 
       centerDialogVisible: false,
+
+      // 两个表单的下拉框
+      options: [],
 
       // 编辑表单
       dialogFormVisible: false,
@@ -357,6 +375,21 @@ export default {
       this.page = page
       this.tableData = result.data
     },
+    async getNodeId() {
+      let respone = await reqNodeId()
+      let result = respone.data
+
+      // 使用前先清空
+      this.options = []
+
+      result.forEach(value => {
+        let arr = {
+          value: value.nodeId,
+          label: value.msg
+        }
+        this.options.push(arr)
+      });
+    },
     // 处理分页请求, 同时更新数据
     handleCurrentChange(val) {
       this.getDevInfo(val)
@@ -371,6 +404,8 @@ export default {
       this.ruleForm.dataBit = row.dataBit
       this.ruleForm.stopBit = row.stopBit
       this.ruleForm.remark = row.remark
+
+      this.getNodeId()
       
       this.dialogFormVisible = true;
     },
@@ -427,6 +462,8 @@ export default {
     },
     addNew() {
       // 要清空，不然下一次就会有之前添加的信息
+      this.getNodeId()
+
       this.addFormVisible = true
       this.resetAddForm('addForm')
     },

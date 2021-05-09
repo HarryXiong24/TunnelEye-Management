@@ -14,32 +14,33 @@
     </div>
 
     <div class="title">部门层级信息</div>
-
+  <el-card shadow="hover">
     <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick">
-      <span class="custom-tree-node" slot-scope="{ node, data }">
+      <div class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}(ID:{{ data.depId }})</span>
         <span>
           <el-button
             type="text"
-            size="mini"
+            size="medium"
             @click="() => showData(data)">
             查看详情
           </el-button>
           <el-button
             type="text"
-            size="mini"
+            size="medium"
             @click="() => handleEdit(data)">
             修改
           </el-button>
           <el-button
             type="text"
-            size="mini"
+            size="medium"
             @click="() => handleDelete(data)">
             删除
           </el-button>
         </span>
-      </span>
+      </div>
     </el-tree>
+  </el-card>
 
     <el-dialog
       title="部门详情"
@@ -419,6 +420,7 @@ export default {
     font-size: 16px;
     padding-right: 8px;
     color: #5f6464;
+    margin: 20px 5px;
   }
   .dialog {
     .box-card {
