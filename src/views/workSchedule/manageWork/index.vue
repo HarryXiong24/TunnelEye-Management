@@ -102,8 +102,15 @@
             <el-input v-model.number="ruleForm.dutyId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
           </el-form-item> 
 
-          <el-form-item label="班组ID" prop="groupId">
-            <el-input v-model.number="ruleForm.groupId"></el-input>
+          <el-form-item label="班组" prop="groupId">
+            <el-select v-model="ruleForm.groupId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="开始工作时间" required>
@@ -152,8 +159,15 @@
             <el-input v-model.number="addForm.dutyId" :disabled="true" placeholder="系统指定, 禁止修改"></el-input>
           </el-form-item> 
 
-          <el-form-item label="班组ID" prop="groupId">
-            <el-input v-model.number="addForm.groupId"></el-input>
+          <el-form-item label="班组" prop="groupId">
+            <el-select v-model="addForm.groupId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="开始工作时间" required>
@@ -207,6 +221,7 @@
 
 <script>
 import { reqManageWork, addManageWork, deleteManageWork, reviewManageWork } from '@/api/manageWork'
+import { reqGroupId } from '@/api/getSelectId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 
@@ -237,6 +252,9 @@ export default {
       // 导出框选择的属性
       centerDialogVisible: false,
 
+      // 两个表单的下拉框
+      options: [],
+
       // 编辑表单
       dialogFormVisible: false,
       ruleForm: {
@@ -248,8 +266,8 @@ export default {
       },
       rules: {
         groupId: [
-          { required: true, message: '请输入系统ID', trigger: 'blur' },
-          { type: 'number', message: '系统ID必须为数字', trigger: 'blur'}
+          { required: true, message: '请输入所在班组', trigger: 'blur' },
+          { type: 'number', message: '所在班组必须为数字', trigger: 'blur'}
         ],
         startTime: [
           { type: 'date', required: true, message: '请输入时间', trigger: 'blur'}
@@ -270,8 +288,8 @@ export default {
       },
       addRules: {
         groupId: [
-          { required: true, message: '请输入系统ID', trigger: 'blur' },
-          { type: 'number', message: '系统ID必须为数字', trigger: 'blur'}
+          { required: true, message: '请输入所在班组', trigger: 'blur' },
+          { type: 'number', message: '所在班组必须为数字', trigger: 'blur'}
         ],
         startTime: [
           { type: 'date', required: true, message: '请输入时间', trigger: 'blur'}
@@ -296,6 +314,21 @@ export default {
       this.page = page
       this.tableData = result.data
     },
+    async getSelectId() {
+      let respone = await reqGroupId()
+      let result = respone.data
+
+      // 使用前先清空
+      this.options = []
+
+      result.forEach(value => {
+        let arr = {
+          value: value.groupId,
+          label: value.msg
+        }
+        this.options.push(arr)
+      });
+    },
     // 处理分页请求, 同时更新数据
     handleCurrentChange(val) {
       this.getDevInfo(val)
@@ -306,6 +339,8 @@ export default {
       this.ruleForm.startTime = row.startTime
       this.ruleForm.endTime = row.endTime
       this.ruleForm.remark = row.remark
+
+      this.getSelectId()
       
       this.dialogFormVisible = true;
     },
@@ -358,6 +393,7 @@ export default {
     },
     addNew() {
       // 要清空，不然下一次就会有之前添加的信息
+      this.getSelectId()
       this.addFormVisible = true
       this.resetAddForm('addForm')
     },

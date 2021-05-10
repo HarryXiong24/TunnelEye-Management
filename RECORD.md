@@ -138,3 +138,9 @@
 
 1. nodeId选择框改成下拉形式
 2. 部门展示加入card，美化界面
+
+### 0.6.3
+
+1. sysID改成下拉形式
+2. departmentID改成下拉形式
+3. groupID改成下拉形式

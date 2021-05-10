@@ -119,8 +119,15 @@
             <el-input v-model.number="addForm.userid"></el-input>
           </el-form-item> 
 
-          <el-form-item label="成员所在班组ID" prop="groupId">
-            <el-input v-model.number="addForm.groupId"></el-input>
+          <el-form-item label="成员所在班组" prop="groupId">
+            <el-select v-model="addForm.groupId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
         </el-form>
@@ -139,6 +146,7 @@
 
 <script>
 import { reqGroup, addWorker, deleteWorker, bindLabel } from '@/api/manageGroup'
+import { reqGroupId } from '@/api/getSelectId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 
@@ -165,6 +173,9 @@ export default {
 
       // 导出框选择的属性
       centerDialogVisible: false,
+
+      // 两个表单的下拉框
+      options: [],
 
       // 编辑表单
       dialogFormVisible: false,
@@ -226,11 +237,28 @@ export default {
         }
       })
     },
+    async getSelectId() {
+      let respone = await reqGroupId()
+      let result = respone.data
+
+      // 使用前先清空
+      this.options = []
+
+      result.forEach(value => {
+        let arr = {
+          value: value.groupId,
+          label: value.msg
+        }
+        this.options.push(arr)
+      });
+    },
     handleEdit(index, row) {
       this.ruleForm.userid = row.userid
       this.ruleForm.userName = row.userName     
       this.ruleForm.labelId = row.labelId
       this.ruleForm.labelAdd = row.labelAdd
+
+      this.getSelectId()
 
       this.dialogFormVisible = true;
     },
@@ -287,6 +315,7 @@ export default {
     },
     addNew() {
       // 要清空，不然下一次就会有之前添加的信息
+      this.getSelectId()
       this.addFormVisible = true
       this.resetAddForm('addForm')
     },

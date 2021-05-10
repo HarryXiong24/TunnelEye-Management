@@ -245,7 +245,7 @@
 
 <script>
 import { reqDevConfig, addDevConfig, deleteDevConfig, reviewDevConfig } from '@/api/devConfig'
-import { reqNodeId } from '@/api/getNodeId'
+import { reqNodeId } from '@/api/getSelectId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 

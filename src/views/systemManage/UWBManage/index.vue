@@ -257,7 +257,7 @@
 
 <script>
 import { reqUWBInfo, addUWBInfo, deleteUWBInfo, reviewUWBInfo } from '@/api/UWBManage'
-import { reqNodeId } from '@/api/getNodeId'
+import { reqNodeId } from '@/api/getSelectId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 

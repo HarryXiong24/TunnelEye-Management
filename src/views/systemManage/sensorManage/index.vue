@@ -246,7 +246,7 @@
 
 <script>
 import { reqSensorInfo, addSensor, deleteSensor, reviewSensor } from '@/api/sensors'
-import { reqNodeId } from '@/api/getNodeId'
+import { reqNodeId } from '@/api/getSelectId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 

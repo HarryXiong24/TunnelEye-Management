@@ -108,7 +108,14 @@
           </el-form-item> 
 
           <el-form-item label="系统ID" prop="sysId">
-            <el-input v-model.number="ruleForm.sysId"></el-input>
+            <el-select v-model="ruleForm.sysId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="标签编号" prop="labelNo">
@@ -155,7 +162,14 @@
           </el-form-item> 
 
           <el-form-item label="系统ID" prop="sysId">
-            <el-input v-model.number="addForm.sysId"></el-input>
+            <el-select v-model="addForm.sysId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="标签编号" prop="labelNo">
@@ -206,6 +220,7 @@
 
 <script>
 import { reqUWBTagManage, addUWBTagManage, deleteUWBTagManage, reviewUWBTagManage } from '@/api/UWBTagManage'
+import { reqSysId } from '@/api/getSelectId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 
@@ -233,6 +248,9 @@ export default {
       downloadLoading: false,
       excelTitle: '',
       centerDialogVisible: false,
+
+      // 两个表单的下拉框
+      options: [],
 
       // 编辑表单
       dialogFormVisible: false,
@@ -303,6 +321,21 @@ export default {
       this.page = page
       this.tableData = result.data
     },
+    async getSelectId() {
+      let respone = await reqSysId()
+      let result = respone.data
+
+      // 使用前先清空
+      this.options = []
+
+      result.forEach(value => {
+        let arr = {
+          value: value.sysId,
+          label: value.msg
+        }
+        this.options.push(arr)
+      });
+    },
     // 处理分页请求, 同时更新数据
     handleCurrentChange(val) {
       this.getDevInfo(val)
@@ -314,6 +347,8 @@ export default {
       this.ruleForm.labelAdd = row.labelAdd
       this.ruleForm.importTime = row.importTime
       this.ruleForm.remark = row.remark
+
+      this.getSelectId()
       
       this.dialogFormVisible = true;
     },
@@ -367,6 +402,7 @@ export default {
     },
     addNew() {
       // 要清空，不然下一次就会有之前添加的信息
+      this.getSelectId()
       this.addFormVisible = true
       this.resetAddForm('addForm')
     },

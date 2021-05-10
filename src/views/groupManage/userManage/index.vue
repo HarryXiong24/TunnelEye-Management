@@ -160,8 +160,15 @@
             <el-input v-model.number="ruleForm.pass"></el-input>
           </el-form-item>
 
-          <el-form-item label="所属部门ID" prop="depId">
-            <el-input v-model.number="ruleForm.depId"></el-input>
+          <el-form-item label="所属部门" prop="depId">
+            <el-select v-model="ruleForm.depId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item> 
 
           <el-form-item label="性别" prop="sex">
@@ -229,8 +236,15 @@
             <el-input v-model.number="addForm.pass"></el-input>
           </el-form-item>
 
-          <el-form-item label="所属部门ID" prop="depId">
-            <el-input v-model.number="addForm.depId"></el-input>
+          <el-form-item label="所属部门" prop="depId">
+            <el-select v-model="addForm.depId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item> 
 
           <el-form-item label="性别" prop="sex">
@@ -301,6 +315,7 @@
 
 <script>
 import { reqUserInfo, addUserInfo, deleteUserInfo, reviewUserInfo } from '@/api/userGroup'
+import { reqDepartmentId } from '@/api/getSelectId'
 import moment from 'moment';
 import waves from '@/directive/waves' // waves directive
 import { decrypt } from '@/utils/crypto'
@@ -336,6 +351,9 @@ export default {
       // 导出Excel的属性
       downloadLoading: false,
       excelTitle: '',
+
+      // 两个表单的下拉框
+      options: [],
 
       // 编辑表单
       dialogFormVisible: false,
@@ -486,12 +504,26 @@ export default {
         this.tableShowData.push(data)
       })
     },
+    async getSelectId() {
+      let respone = await reqDepartmentId()
+      let result = respone.data
+
+      // 使用前先清空
+      this.options = []
+
+      result.forEach(value => {
+        let arr = {
+          value: value.depId,
+          label: value.msg
+        }
+        this.options.push(arr)
+      });
+    },
     // 处理分页请求, 同时更新数据
     handleCurrentChange(val) {
       this.getDevInfo(val)
     },
     handleEdit(index, row) {
-
       this.ruleForm.userid = row.userid
       this.ruleForm.userName = row.userName  
       this.ruleForm.loginName = row.loginName      
@@ -502,6 +534,8 @@ export default {
       this.ruleForm.mobile = row.mobile   
       this.ruleForm.idCard = row.idCard
       this.ruleForm.lastTime = row.lastTime
+
+      this.getSelectId()
       
       this.dialogFormVisible = true;
     },
@@ -559,6 +593,7 @@ export default {
     },
     addNew() {
       // 要清空，不然下一次就会有之前添加的信息
+      this.getSelectId()
       this.addFormVisible = true
       this.resetAddForm('addForm')
     },
