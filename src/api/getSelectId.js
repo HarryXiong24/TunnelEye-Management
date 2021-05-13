@@ -27,3 +27,18 @@ export function reqGroupId() {
     method: 'get',
   })
 }
+
+export function reqDepIdReview(params) {
+  return request({
+    url: '/select/department2',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function reqDepIdAdd() {
+  return request({
+    url: '/select/department2',
+    method: 'get',
+  })
+}

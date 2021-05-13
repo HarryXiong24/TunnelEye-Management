@@ -14,33 +14,33 @@
     </div>
 
     <div class="title">部门层级信息</div>
-  <el-card shadow="hover">
-    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick">
-      <div class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.label }}(ID:{{ data.depId }})</span>
-        <span>
-          <el-button
-            type="text"
-            size="medium"
-            @click="() => showData(data)">
-            查看详情
-          </el-button>
-          <el-button
-            type="text"
-            size="medium"
-            @click="() => handleEdit(data)">
-            修改
-          </el-button>
-          <el-button
-            type="text"
-            size="medium"
-            @click="() => handleDelete(data)">
-            删除
-          </el-button>
-        </span>
-      </div>
-    </el-tree>
-  </el-card>
+    <el-card shadow="hover">
+      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick">
+        <div class="custom-tree-node" slot-scope="{ node, data }">
+          <span>{{ node.label }}(ID:{{ data.depId }})</span>
+          <span>
+            <el-button
+              type="text"
+              size="medium"
+              @click="() => showData(data)">
+              查看详情
+            </el-button>
+            <el-button
+              type="text"
+              size="medium"
+              @click="() => handleEdit(data)">
+              修改
+            </el-button>
+            <el-button
+              type="text"
+              size="medium"
+              @click="() => handleDelete(data)">
+              删除
+            </el-button>
+          </span>
+        </div>
+      </el-tree>
+    </el-card>
 
     <el-dialog
       title="部门详情"
@@ -99,7 +99,14 @@
           </el-form-item>
 
           <el-form-item label="所属上级部门ID(该项为父级部门的部门ID)" prop="parentDepId">
-            <el-input v-model.number="ruleForm.parentDepId"></el-input>
+            <el-select v-model="ruleForm.parentDepId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item> 
 
           <el-form-item label="备注" prop="remark">
@@ -135,7 +142,14 @@
           </el-form-item>
 
           <el-form-item label="所属上级部门ID(该项为父级部门的部门ID)" prop="parentDepId">
-            <el-input v-model.number="addForm.parentDepId"></el-input>
+            <el-select v-model="addForm.parentDepId" size="medium" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item> 
 
           <el-form-item label="备注" prop="remark">
@@ -158,6 +172,7 @@
 
 <script>
 import { reqDepartment, addDepartment, reviewDepartment, deleteDepartment } from '@/api/department'
+import { reqDepIdAdd, reqDepIdReview } from '@/api/getSelectId'
 
 export default {
   data() {
@@ -173,6 +188,9 @@ export default {
       nowData: {},
 
       visible: false,
+
+      // 两个表单的下拉框
+      options: [],
 
       // 编辑表单
       dialogFormVisible: false,
@@ -239,6 +257,39 @@ export default {
       // 当前点击值置空
       this.nowData = {}
     },
+    async getReviewId(depId) {
+      let data = {
+        depId: depId
+      }
+      let respone = await reqDepIdReview(data)
+      let result = respone.data
+
+      // 使用前先清空
+      this.options = []
+
+      result.forEach(value => {
+        let arr = {
+          value: value.depId,
+          label: value.msg
+        }
+        this.options.push(arr)
+      });
+    },
+    async getAddId() {
+      let respone = await reqDepIdAdd()
+      let result = respone.data
+
+      // 使用前先清空
+      this.options = []
+
+      result.forEach(value => {
+        let arr = {
+          value: value.depId,
+          label: value.msg
+        }
+        this.options.push(arr)
+      });
+    },
     handleNodeClick(data) {
       this.nowData = data
     },
@@ -256,6 +307,8 @@ export default {
       this.ruleForm.parentDepId = this.nowData.parentDepId
       this.ruleForm.remark = this.nowData.remark
       
+      this.getReviewId(this.ruleForm.depId)
+
       this.dialogFormVisible = true;
     },
     handleDelete(data) {
@@ -308,6 +361,7 @@ export default {
     },
     addNew() {
       // 要清空，不然下一次就会有之前添加的信息
+      this.getAddId()
       this.addFormVisible = true
       this.resetAddForm('addForm')
     },

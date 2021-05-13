@@ -209,7 +209,7 @@
 
      <div class="addEditor">
 
-      <el-dialog title="新增传感器信息" :visible.sync="addFormVisible" center>
+      <el-dialog title="新增用户信息" :visible.sync="addFormVisible" center>
 
         <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="100px" class="demo-ruleForm">
           
@@ -403,7 +403,7 @@ export default {
         sex: null,
         mobile: '',
         idCard: '',
-        lastTime: '',
+        lastTime: new Date(),
       },
       addRules: {
         userName: [
@@ -564,7 +564,6 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
-          // 有问题待讨论解决
           let data = {
             userName: this.ruleForm.userName,
             loginName: this.ruleForm.loginName,

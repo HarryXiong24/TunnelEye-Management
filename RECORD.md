@@ -144,3 +144,8 @@
 1. sysID改成下拉形式
 2. departmentID改成下拉形式
 3. groupID改成下拉形式
+
+### 0.6.4
+
+1. depID改成下拉形式
+2. 修改一些bug
