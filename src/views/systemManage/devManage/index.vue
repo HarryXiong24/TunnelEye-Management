@@ -123,12 +123,12 @@
             <el-input v-model="ruleForm.devAddress"></el-input>
           </el-form-item>
 
-          <el-form-item label="下位机状态" prop="status">
+          <!-- <el-form-item label="下位机状态" prop="status">
             <el-radio-group v-model="ruleForm.status">
               <el-radio label="1">在线</el-radio>
               <el-radio label="0">离线</el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
           
           <!-- <el-form-item label="下位机最近在线时间" required>
             <el-col :span="11">
@@ -177,12 +177,12 @@
             <el-input v-model="addForm.devAddress"></el-input>
           </el-form-item>
 
-          <el-form-item label="下位机状态" prop="status">
+          <!-- <el-form-item label="下位机状态" prop="status">
             <el-radio-group v-model="addForm.status">
               <el-radio label="1">在线</el-radio>
               <el-radio label="0">离线</el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
           
           <!-- <el-form-item label="下位机最近在线时间" required>
             <el-col :span="11">
@@ -270,9 +270,9 @@ export default {
         // onlineLastTime: [
         //   { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
         // ],
-        status: [
-          { required: true, message: '请选择下位机状态', trigger: 'blur' }
-        ],
+        // status: [
+        //   { required: true, message: '请选择下位机状态', trigger: 'blur' }
+        // ],
       },
 
       // 新增信息的属性
@@ -300,9 +300,9 @@ export default {
         // onlineLastTime: [
         //   { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
         // ],
-        status: [
-          { required: true, message: '请选择下位机状态', trigger: 'change' }
-        ],
+        // status: [
+        //   { required: true, message: '请选择下位机状态', trigger: 'change' }
+        // ],
       }
     }
   },
@@ -359,14 +359,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
-          // 有问题待讨论解决
           let data = {
             devNo: this.ruleForm.devNo,
             devName: this.ruleForm.devName,
             devAddress: this.ruleForm.devAddress,
-            status: Number(this.ruleForm.status),
+            // status: Number(this.ruleForm.status),
             remark: this.ruleForm.remark
           }
+          console.log(data);
+          console.log(this.tableData)
           let response = await reviewDev(this.ruleForm.nodeId, data)
           let msg = response.data.msg
           this.$message({
@@ -390,14 +391,14 @@ export default {
     submitAddForm(formName) {
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
-          // 有问题待讨论解决
           let data = {
             devNo: this.addForm.devNo,
             devName: this.addForm.devName,
             devAddress: this.addForm.devAddress,
-            status: Number(this.addForm.status),
+            // status: Number(this.addForm.status),
             remark: this.addForm.remark
           }
+          console.log(data);
           let response = await addDev(data)
           let msg = response.data.msg
           this.$message({
