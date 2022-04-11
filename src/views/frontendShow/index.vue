@@ -1,6 +1,6 @@
 <template>
   <div class="frontendShow">
-    <iframe src="http://tunneleye.coyote416.cn/" width="30%" height="100%" frameborder="0" class="show">
+    <iframe src="http://www.tunneleye.coyote416.cn/" width="30%" height="100%" frameborder="0" class="show">
     </iframe>
     
     <el-card shadow="always" class="card">
@@ -18,7 +18,7 @@
       </div>
       <div class="item">
           4. 若想访问移动端网页APP, 请用手机浏览器访问: 
-          <el-link @click="goTo" :style="{'color':theme}" herf="http://tunneleye.coyote416.cn">隧道之眼(http://tunneleye.coyote416.cn)</el-link>
+          <el-link @click="goTo" :style="{'color':theme}" herf="http://www.tunneleye.coyote416.cn/">隧道之眼(http://www.tunneleye.coyote416.cn/)</el-link>
       </div>
     </el-card>
     
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     goTo() {
-      window.location.href = "http://tunneleye.coyote416.cn"
+      window.location.href = "http://www.tunneleye.coyote416.cn/"
     }
   },
   computed: {

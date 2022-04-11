@@ -1,5 +1,5 @@
 <template>
-  <div class="index-container">
+  <div class="index-container" id="main">
 
     <div class="welcome">欢迎您! 尊敬的 {{ name }} 用户:</div>
 
